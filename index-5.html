@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meine Lern-Apps – 5b</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow:  #FFD93D;
+    --bg:      #FFF9F0;
+    --surface: #FFFFFF;
+    --text:    #2D2A3E;
+    --muted:   #9B96B0;
+    --shadow:  rgba(80,60,120,.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; overflow-x: hidden;
+  }
+  body::before, body::after {
+    content: ''; position: fixed; border-radius: 50%;
+    z-index: -1; filter: blur(80px); opacity: .4;
+  }
+  body::before {
+    width:520px; height:520px;
+    background: radial-gradient(circle,#FFD93D,#FF9A3C);
+    top:-160px; left:-160px;
+  }
+  body::after {
+    width:420px; height:420px;
+    background: radial-gradient(circle,#C77DFF,#4CC9F0);
+    bottom:-120px; right:-120px;
+  }
+
+  /* ── HEADER ── */
+  header { text-align:center; padding:48px 20px 28px; position:relative; }
+  .badge {
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--yellow); color:#6B4700; border-radius:40px;
+    padding:5px 18px; font-size:.78rem; font-weight:700;
+    letter-spacing:.6px; text-transform:uppercase; margin-bottom:16px;
+    box-shadow:0 4px 12px rgba(255,217,61,.4);
+    animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  h1 {
+    font-family:'Baloo 2',cursive; font-size:clamp(2.2rem,7vw,3.8rem);
+    font-weight:800; line-height:1.05;
+    background:linear-gradient(135deg,#FF6B9D,#FF9A3C,#FFD93D);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    animation:popIn .5s .1s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .subtitle {
+    margin-top:10px; font-size:1rem; color:var(--muted); font-weight:600;
+    animation:popIn .5s .2s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .stars { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+  .star { position:absolute; font-size:1.4rem; animation:floatStar 6s ease-in-out infinite; opacity:.7; }
+  .star:nth-child(1){top:12%;left:8%;animation-delay:0s;}
+  .star:nth-child(2){top:20%;right:10%;animation-delay:.8s;font-size:1rem;}
+  .star:nth-child(3){top:60%;left:4%;animation-delay:1.5s;font-size:1.8rem;}
+  .star:nth-child(4){top:70%;right:6%;animation-delay:.4s;font-size:1.1rem;}
+  .star:nth-child(5){top:40%;left:92%;animation-delay:2s;font-size:.9rem;}
+  @keyframes floatStar{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(15deg);}}
+
+  /* ── PERKS ── */
+  .perks {
+    display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
+    max-width:700px; margin:0 auto 30px; padding:0 20px;
+    animation:popIn .5s .3s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .perk {
+    display:flex; align-items:center; gap:7px; background:var(--surface);
+    border-radius:40px; padding:7px 18px; font-size:.8rem; font-weight:700;
+    color:var(--muted); box-shadow:0 3px 10px var(--shadow);
+  }
+
+  /* ── TABS ── */
+  .tabs-outer { max-width:960px; margin:0 auto; padding:0 20px; }
+  .subject-tabs {
+    display:flex; flex-wrap:wrap; gap:6px;
+    animation:popIn .5s .35s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .subject-btn {
+    font-family:'Baloo 2',cursive; font-size:1.05rem; font-weight:700;
+    padding:12px 28px; border-radius:16px 16px 0 0;
+    border:2.5px solid transparent; border-bottom:none;
+    background:rgba(255,255,255,.55); color:var(--muted);
+    cursor:pointer; transition:all .2s; position:relative; bottom:-2px;
+  }
+  .subject-btn:hover { color:var(--text); background:rgba(255,255,255,.85); }
+  .subject-btn.active {
+    background:var(--surface); color:var(--text);
+    border-color:rgba(0,0,0,.08); border-bottom-color:var(--surface);
+    box-shadow:0 -4px 14px var(--shadow); z-index:2;
+  }
+  .subject-btn[data-subject="deutsch"].active  { border-top-color:#4CC9F0; }
+  .subject-btn[data-subject="mathe"].active    { border-top-color:#FF9A3C; }
+  .subject-btn[data-subject="englisch"].active { border-top-color:#06D6A0; }
+
+  /* ── PANEL ── */
+  .panel-outer { max-width:960px; margin:0 auto; padding:0 20px 60px; }
+  .subject-panel-wrap {
+    background:var(--surface); border-radius:0 22px 22px 22px;
+    border:2.5px solid rgba(0,0,0,.08);
+    padding:32px 28px 36px;
+    box-shadow:0 8px 32px var(--shadow);
+    position:relative; z-index:1;
+    animation:popIn .5s .4s cubic-bezier(.34,1.56,.64,1) both;
+    min-height:200px;
+  }
+  .subject-content { display:none; }
+  .subject-content.active { display:block; animation:fadeUp .3s ease both; }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:18px;
+  }
+
+  /* ── APP CARD ── */
+  .app-card {
+    background:#FAFBFF; border-radius:20px; padding:22px 20px 18px;
+    text-decoration:none; color:var(--text);
+    border:2px solid rgba(0,0,0,.06); box-shadow:0 4px 16px var(--shadow);
+    transition:transform .2s,box-shadow .2s,border-color .2s;
+    position:relative; overflow:hidden; display:flex; flex-direction:column;
+  }
+  .app-card:hover { transform:translateY(-6px) scale(1.01); box-shadow:0 14px 40px var(--shadow); }
+  .app-card::before {
+    content:''; position:absolute; top:0; left:0; right:0;
+    height:5px; border-radius:20px 20px 0 0;
+  }
+  .card-de::before { background:linear-gradient(90deg,#4CC9F0,#0077B6); }
+  .card-ma::before { background:linear-gradient(90deg,#FF9A3C,#E55A00); }
+  .card-en::before { background:linear-gradient(90deg,#06D6A0,#028A5B); }
+  .card-de:hover { border-color:rgba(76,201,240,.4); }
+  .card-ma:hover { border-color:rgba(255,154,60,.4); }
+  .card-en:hover { border-color:rgba(6,214,160,.4); }
+  .card-icon { font-size:2.4rem; margin-bottom:10px; display:block; transition:transform .3s; line-height:1; }
+  .app-card:hover .card-icon { transform:scale(1.2) rotate(-6deg); }
+  .card-tag {
+    display:inline-block; font-size:.68rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:.7px;
+    border-radius:20px; padding:3px 10px; margin-bottom:8px;
+  }
+  .card-de .card-tag { background:rgba(76,201,240,.12); color:#0077B6; }
+  .card-ma .card-tag { background:rgba(255,154,60,.12); color:#C44D00; }
+  .card-en .card-tag { background:rgba(6,214,160,.12);  color:#028A5B; }
+  .card-title { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; margin-bottom:7px; line-height:1.15; }
+  .card-de .card-title { color:#0077B6; }
+  .card-ma .card-title { color:#C44D00; }
+  .card-en .card-title { color:#028A5B; }
+  .card-desc { font-size:.82rem; font-weight:600; color:var(--muted); line-height:1.5; flex:1; margin-bottom:16px; }
+  .card-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 20px; border-radius:50px;
+    font-family:'Baloo 2',cursive; font-size:.9rem; font-weight:700;
+    color:#fff; border:none; cursor:pointer;
+    transition:filter .2s,transform .15s; align-self:flex-start; text-decoration:none;
+  }
+  .card-btn:hover { filter:brightness(1.08); transform:scale(1.05); }
+  .arrow { display:inline-block; transition:transform .2s; }
+  .app-card:hover .arrow { transform:translateX(5px); }
+  .card-de .card-btn { background:linear-gradient(135deg,#4CC9F0,#0077B6); box-shadow:0 4px 14px rgba(76,201,240,.3); }
+  .card-ma .card-btn { background:linear-gradient(135deg,#FF9A3C,#E55A00); box-shadow:0 4px 14px rgba(255,154,60,.3); }
+  .card-en .card-btn { background:linear-gradient(135deg,#06D6A0,#028A5B); box-shadow:0 4px 14px rgba(6,214,160,.3); }
+
+  /* ── PLATZHALTER ── */
+  .placeholder {
+    text-align:center; padding:48px 20px;
+    color:var(--muted); font-weight:600; font-size:.95rem;
+  }
+  .placeholder .big { font-size:3rem; display:block; margin-bottom:12px; }
+  .placeholder p { max-width:320px; margin:0 auto; line-height:1.6; }
+
+  /* ── FOOTER ── */
+  footer { text-align:center; padding:10px 20px 50px; font-size:.75rem; font-weight:700; color:var(--muted); }
+
+  @keyframes popIn{from{opacity:0;transform:scale(.85) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+  @media(max-width:540px){
+    .cards-grid{grid-template-columns:1fr;}
+    h1{font-size:2.2rem;}
+    .subject-panel-wrap{border-radius:0 0 22px 22px;}
+    .subject-btn{padding:10px 18px; font-size:.95rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" aria-hidden="true">
+  <span class="star">⭐</span><span class="star">✨</span>
+  <span class="star">🌟</span><span class="star">💫</span><span class="star">⭐</span>
+</div>
+
+<header>
+  <div class="badge">🏫 5b · Mittelschule Bayern</div>
+  <h1>Meine Lern-Apps</h1>
+  <p class="subtitle">Wähle ein Fach und übe – jedes Mal neue Aufgaben! 🚀</p>
+</header>
+
+<div class="perks">
+  <div class="perk">🎲 Jedes Mal neue Aufgaben</div>
+  <div class="perk">⭐ Punkte sammeln</div>
+  <div class="perk">📱 Handy &amp; Tablet</div>
+  <div class="perk">🔒 Kein Login nötig</div>
+</div>
+
+<!-- ══ REITER ══ -->
+<div class="tabs-outer">
+  <div class="subject-tabs">
+    <button class="subject-btn active" data-subject="deutsch">🇩🇪 Deutsch</button>
+    <button class="subject-btn"        data-subject="mathe">🔢 Mathe</button>
+    <button class="subject-btn"        data-subject="englisch">🇬🇧 Englisch</button>
+  </div>
+</div>
+
+<!-- ══ PANEL ══ -->
+<div class="panel-outer">
+  <div class="subject-panel-wrap">
+
+    <!-- DEUTSCH -->
+    <div class="subject-content active" id="subject-deutsch">
+      <div class="cards-grid">
+        <!-- Apps kommen hier rein -->
+      </div>
+      <div class="placeholder">
+        <span class="big">📝</span>
+        <p>Hier kommen bald Deutsch-Apps zum Üben!</p>
+      </div>
+    </div>
+
+    <!-- MATHE -->
+    <div class="subject-content" id="subject-mathe">
+      <div class="cards-grid">
+        <!-- Apps kommen hier rein -->
+      </div>
+      <div class="placeholder">
+        <span class="big">🔢</span>
+        <p>Hier kommen bald Mathe-Apps zum Üben!</p>
+      </div>
+    </div>
+
+    <!-- ENGLISCH -->
+    <div class="subject-content" id="subject-englisch">
+      <div class="cards-grid">
+        <!-- Apps kommen hier rein -->
+      </div>
+      <div class="placeholder">
+        <span class="big">🇬🇧</span>
+        <p>Hier kommen bald Englisch-Apps zum Üben!</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>Erstellt für die <strong>5b · Mittelschule Bayern</strong> 🎒</footer>
+
+<script>
+  document.querySelectorAll('.subject-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.subject-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('subject-' + btn.dataset.subject).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
