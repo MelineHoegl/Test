@@ -380,7 +380,7 @@ var GENERATOREN = {
       var rabatt = runde(preis * prozent / 100, 2);
       var neu = runde(preis - rabatt, 2);
       return {
-        sach: "🏷️ Ein Shirt kostet <strong>" + euro(preis) + "</strong>. Im Ausverkauf gibt es <strong>" + prozent + % Rabatt</strong>.",
+        sach: "🏷️ Ein Shirt kostet <strong>" + euro(preis) + "</strong>. Im Ausverkauf gibt es <strong>" + prozent + "% Rabatt</strong>.",
         frage: "Wie viel kostet das Shirt im Ausverkauf?",
         antwort: neu, einheit: "€",
         tipp: prozent + "% von " + euro(preis) + " = " + euro(rabatt) + " Rabatt. Neuer Preis: " + euro(preis) + " − " + euro(rabatt),
