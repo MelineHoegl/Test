@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Present – Englisch 5b</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gelb:#F9E04B;--amber:#FFB300;--dunkel:#E65100;--gruen:#06D6A0;--dgruen:#028A5B;--rot:#FF5252;--w:#FFF;--text:#3A2A00;--grau:#B08040;--sh:rgba(180,140,0,.12);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Quicksand',sans-serif;color:var(--text);min-height:100vh;padding-bottom:60px;background:linear-gradient(180deg,#FFFDE7,#FFF9C4,#FFE082);}
+a.back{display:inline-flex;align-items:center;gap:8px;margin:18px 20px;font-family:'Baloo 2',cursive;font-size:.9rem;font-weight:700;color:var(--dunkel);background:rgba(255,255,255,.65);border-radius:50px;padding:8px 18px;text-decoration:none;box-shadow:0 2px 10px rgba(180,140,0,.15);transition:background .2s,transform .2s;}
+a.back:hover{background:rgba(255,255,255,.9);transform:translateX(-3px);}
+header{text-align:center;padding:6px 16px 16px;}
+.badge{display:inline-block;background:rgba(255,255,255,.7);color:var(--dunkel);border-radius:40px;padding:4px 16px;font-size:.75rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;box-shadow:0 3px 10px rgba(180,140,0,.18);}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.6rem,5vw,2.6rem);font-weight:800;color:var(--dunkel);margin-bottom:3px;}
+header p{font-size:.88rem;color:var(--grau);font-weight:600;}
+.card{background:var(--w);border-radius:20px;padding:20px 22px;max-width:700px;margin:0 auto 14px;box-shadow:0 6px 28px var(--sh);border:2px solid rgba(249,224,75,.18);}
+
+/* REMINDER */
+.rem-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.rem-title{font-family:'Baloo 2',cursive;font-size:1rem;font-weight:800;color:var(--dunkel);}
+.arr{font-size:.85rem;color:var(--grau);transition:transform .3s;}
+.arr.open{transform:rotate(180deg);}
+.rem-body{display:none;margin-top:12px;}
+.rem-body.open{display:block;}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:9px;margin-bottom:12px;}
+.rbox{border-radius:13px;padding:11px 13px;border:2px solid rgba(249,224,75,.4);background:#FFFDE7;}
+.rbox h3{font-family:'Baloo 2',cursive;font-size:.85rem;font-weight:800;color:var(--dunkel);margin-bottom:4px;}
+.rbox p{font-size:.76rem;font-weight:600;line-height:1.6;}
+.rbox code{background:rgba(249,224,75,.45);border-radius:4px;padding:1px 5px;font-size:.76rem;color:var(--dunkel);}
+.rtab{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:6px;}
+.rtab th{background:rgba(249,224,75,.3);color:var(--dunkel);font-weight:800;padding:5px 9px;text-align:left;}
+.rtab td{padding:4px 9px;border-bottom:1px solid rgba(249,224,75,.2);font-weight:600;}
+.rtab tr:last-child td{border-bottom:none;}
+.pill{display:inline-block;border-radius:20px;padding:1px 8px;font-size:.72rem;font-weight:800;}
+.pg{background:rgba(6,214,160,.15);color:#028A5B;}
+.pr{background:rgba(255,82,82,.15);color:#C0392B;}
+
+/* PUNKTE */
+.pbar{display:flex;gap:8px;flex-wrap:wrap;background:rgba(249,224,75,.1);border-radius:13px;padding:9px 14px;margin-bottom:14px;border:1.5px solid rgba(249,224,75,.28);}
+.pb{text-align:center;flex:1;}
+.pl{font-size:.68rem;font-weight:700;color:var(--grau);text-transform:uppercase;}
+.pz{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:800;color:var(--dunkel);}
+.pz.g{color:var(--dgruen);} .pz.r{color:#C0392B;}
+
+/* LEVEL */
+.lrow{display:flex;justify-content:center;gap:9px;margin-bottom:14px;flex-wrap:wrap;}
+.lbtn{font-family:'Baloo 2',cursive;font-size:.92rem;font-weight:700;padding:9px 26px;border-radius:50px;border:2.5px solid rgba(249,224,75,.5);background:rgba(255,255,255,.5);color:var(--dunkel);cursor:pointer;transition:all .2s;}
+.lbtn:hover{background:rgba(255,255,255,.8);}
+.lbtn.on{background:var(--w);border-color:var(--amber);box-shadow:0 3px 14px rgba(180,140,0,.2);}
+
+/* TABS */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.tab{padding:7px 13px;border-radius:50px;border:2px solid rgba(249,224,75,.28);background:#FFFDE7;color:var(--grau);font-family:'Baloo 2',cursive;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:var(--amber);color:var(--dunkel);}
+.tab.on{background:linear-gradient(135deg,var(--gelb),var(--amber));color:var(--text);border-color:transparent;box-shadow:0 3px 11px rgba(180,140,0,.2);}
+
+/* AUFGABE */
+.qbox{background:rgba(249,224,75,.07);border:2px solid rgba(249,224,75,.28);border-radius:18px;padding:20px;}
+.qtyp{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--grau);margin-bottom:7px;}
+.qtext{font-size:1rem;font-weight:700;line-height:1.7;margin-bottom:14px;}
+.qtext strong{color:var(--dunkel);}
+
+/* MC */
+.mclist{display:flex;flex-direction:column;gap:7px;margin-bottom:11px;}
+.mcbtn{padding:11px 14px;border-radius:11px;border:2px solid rgba(249,224,75,.28);background:#fff;color:var(--text);font-family:'Quicksand',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:left;}
+.mcbtn:hover:not(:disabled){border-color:var(--amber);background:rgba(249,224,75,.1);}
+.mcbtn.ok{background:rgba(6,214,160,.12);border-color:#06D6A0;color:#028A5B;}
+.mcbtn.no{background:rgba(255,82,82,.09);border-color:var(--rot);color:#C0392B;}
+.mcbtn:disabled{cursor:default;}
+
+/* CHIPS (Build) */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:9px;}
+.chip{padding:7px 14px;border-radius:50px;background:rgba(249,224,75,.2);border:2px solid rgba(249,224,75,.5);font-family:'Quicksand',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;color:var(--dunkel);transition:all .2s;}
+.chip:hover{background:rgba(249,224,75,.4);transform:translateY(-2px);}
+.chip.used{opacity:.3;pointer-events:none;}
+.slots{min-height:44px;border:2px dashed rgba(249,224,75,.5);border-radius:11px;padding:7px 11px;display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px;background:rgba(249,224,75,.04);align-content:flex-start;}
+.slot-chip{padding:5px 13px;border-radius:50px;background:var(--gelb);color:var(--text);font-family:'Quicksand',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.slot-chip:hover{background:var(--amber);}
+.slots-hint{color:var(--grau);font-size:.8rem;font-weight:600;align-self:center;}
+
+/* INPUT */
+.inp-row{display:flex;gap:9px;align-items:center;margin-bottom:11px;flex-wrap:wrap;}
+.ainp{flex:1;min-width:160px;padding:11px 14px;border-radius:13px;border:2px solid rgba(249,224,75,.32);font-family:'Quicksand',sans-serif;font-size:.98rem;font-weight:700;color:var(--text);outline:none;background:#fff;transition:border-color .2s;}
+.ainp:focus{border-color:var(--amber);}
+
+/* BUTTONS */
+.brow{display:flex;gap:9px;flex-wrap:wrap;margin-top:5px;}
+.cbtn{padding:10px 22px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--gelb),var(--dunkel));color:#fff;font-family:'Baloo 2',cursive;font-size:.92rem;font-weight:700;cursor:pointer;box-shadow:0 3px 13px rgba(230,81,0,.22);transition:filter .2s,transform .15s;}
+.cbtn:hover{filter:brightness(1.08);transform:scale(1.03);}
+.nbtn{display:none;padding:10px 22px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--gruen),var(--dgruen));color:#fff;font-family:'Baloo 2',cursive;font-size:.92rem;font-weight:700;cursor:pointer;box-shadow:0 3px 13px rgba(6,214,160,.28);transition:filter .2s,transform .15s;}
+.nbtn:hover{filter:brightness(1.08);transform:scale(1.03);}
+
+/* FEEDBACK */
+.fb{display:none;border-radius:13px;padding:12px 15px;font-size:.88rem;font-weight:600;margin-top:11px;line-height:1.6;}
+.fb.ok{background:rgba(6,214,160,.1);color:#027A50;border:2px solid rgba(6,214,160,.24);}
+.fb.no{background:rgba(255,82,82,.08);color:#C0392B;border:2px solid rgba(255,82,82,.18);}
+
+footer{text-align:center;padding:8px 16px 36px;font-size:.73rem;font-weight:700;color:rgba(180,140,0,.38);}
+@media(max-width:500px){.card{padding:14px 12px;}.tabs{gap:4px;}}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← Zurück zur Startseite</a>
+
+<header>
+  <div class="badge">📒 Englisch · 5b · Highlight 5</div>
+  <h1>Simple Present</h1>
+  <p>Positive sentences only – every time new questions!</p>
+</header>
+
+<!-- QUICK REMINDER -->
+<div class="card">
+  <div class="rem-head" onclick="toggleRem()">
+    <div class="rem-title">💡 Quick Reminder – Simple Present (positive)</div>
+    <span class="arr" id="arr">▼</span>
+  </div>
+  <div class="rem-body" id="rembody">
+    <div class="rgrid">
+      <div class="rbox">
+        <h3>✅ I / you / we / they</h3>
+        <p>Just use the verb:<br><code>I play.</code> · <code>We live here.</code><br><code>They walk to school.</code></p>
+      </div>
+      <div class="rbox">
+        <h3>⚠️ He / she / it → +s</h3>
+        <p>Add <code>-s</code> to the verb:<br><code>He play<strong>s</strong>.</code> · <code>She like<strong>s</strong> cats.</code></p>
+      </div>
+      <div class="rbox">
+        <h3>⚠️ Special endings</h3>
+        <p>-ch/-sh/-s/-x/-o → <code>+es</code><br>watch → watch<strong>es</strong><br>-y → <code>-ies</code>: study → stud<strong>ies</strong></p>
+      </div>
+      <div class="rbox">
+        <h3>⚠️ Irregular verbs</h3>
+        <p>have → he <strong>has</strong><br>be → he <strong>is</strong><br>do → he <strong>does</strong><br>go → he <strong>goes</strong></p>
+      </div>
+    </div>
+    <table class="rtab">
+      <tr><th>Pronoun</th><th>Example</th><th>Rule</th></tr>
+      <tr><td>I / you / we / they</td><td><span class="pill pg">play</span></td><td>verb (no change)</td></tr>
+      <tr><td>he / she / it</td><td><span class="pill pr">plays</span></td><td>verb + s / es / ies</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- MAIN CARD -->
+<div class="card">
+  <div class="pbar">
+    <div class="pb"><div class="pl">Questions</div><div class="pz" id="zg">0</div></div>
+    <div class="pb"><div class="pl">Correct ✓</div><div class="pz g" id="zr">0</div></div>
+    <div class="pb"><div class="pl">Wrong ✗</div><div class="pz r" id="zf">0</div></div>
+    <div class="pb"><div class="pl">Streak 🔥</div><div class="pz" id="zs">0</div></div>
+  </div>
+
+  <div class="lrow">
+    <button class="lbtn on" id="ba" onclick="setLvl('a',this)">🐣 Beginner</button>
+    <button class="lbtn"    id="bf" onclick="setLvl('f',this)">🚀 Advanced</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-t="rf"  onclick="setTab('rf',this)">🔤 Right Form</button>
+    <button class="tab"    data-t="fg"  onclick="setTab('fg',this)">✏️ Fill the Gap</button>
+    <button class="tab"    data-t="wp"  onclick="setTab('wp',this)">👤 Which Pronoun?</button>
+    <button class="tab"    data-t="bs"  onclick="setTab('bs',this)">🔀 Build a Sentence</button>
+    <button class="tab"    data-t="tr"  onclick="setTab('tr',this)">🌍 Translate</button>
+  </div>
+
+  <div class="qbox">
+    <div class="qtyp"  id="qtyp"></div>
+    <div class="qtext" id="qtext"></div>
+    <div class="mclist" id="mclist"></div>
+    <div class="chips"  id="chips"  style="display:none"></div>
+    <div class="slots"  id="slots"  style="display:none"><span class="slots-hint" id="shint">Tap the words above ↑</span></div>
+    <div class="inp-row" id="inprow" style="display:none">
+      <input type="text" class="ainp" id="ainp" placeholder="Type your answer..." onkeydown="if(event.key==='Enter')check()"/>
+    </div>
+    <div class="brow">
+      <button class="cbtn" id="cbtn" onclick="check()">✓ Check</button>
+      <button class="nbtn" id="nbtn" onclick="next()">Next →</button>
+    </div>
+    <div class="fb" id="fb"></div>
+  </div>
+</div>
+
+<footer>Klasse 5b · Englisch · Simple Present 📒</footer>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────
+// right_form: {s, blank, options, answer, rule}
+// fill_gap:   {s, blank, answer, rule}
+// pronoun:    {s (with ___), options, answer, rule}
+// build:      {words[], answer}
+// translate:  {de, answer, hint}
+
+var D = {
+  a: { // BEGINNER
+    rf: [
+      {s:"___ to school every day. (she / walk)",        ans:"walks",   opts:["walk","walks","walking","walked"],   r:"she → verb+s: walks"},
+      {s:"___ football on Sundays. (he / play)",         ans:"plays",   opts:["play","plays","playing","playes"],   r:"he → verb+s: plays"},
+      {s:"___ TV in the evening. (it / show)",           ans:"shows",   opts:["show","shows","showing","showes"],   r:"it → verb+s: shows"},
+      {s:"___ in London. (they / live)",                 ans:"live",    opts:["lives","live","living","livees"],    r:"they → no -s: live"},
+      {s:"___ a dog. (she / have)",                      ans:"has",     opts:["have","has","haves","having"],       r:"she → irregular: has"},
+      {s:"___ to school by bus. (he / go)",              ans:"goes",    opts:["go","goes","going","gos"],           r:"he → -o+es: goes"},
+      {s:"___ his teeth every morning. (he / brush)",    ans:"brushes", opts:["brush","brushes","brushing","brushs"],r:"he → -sh+es: brushes"},
+      {s:"___ pizza very much. (she / like)",            ans:"likes",   opts:["like","likes","liking","likees"],    r:"she → verb+s: likes"},
+      {s:"___ a book every night. (he / read)",          ans:"reads",   opts:["read","reads","reading","reades"],   r:"he → verb+s: reads"},
+      {s:"___ in a flat. (we / live)",                   ans:"live",    opts:["lives","live","living","livees"],    r:"we → no -s: live"},
+      {s:"___ the dishes. (she / wash)",                 ans:"washes",  opts:["wash","washes","washing","washs"],   r:"she → -sh+es: washes"},
+      {s:"___ English at school. (he / study)",          ans:"studies", opts:["study","studies","studying","studys"],r:"he → -y→ies: studies"},
+      {s:"___ lunch at noon. (she / have)",              ans:"has",     opts:["have","has","haves","having"],       r:"she → irregular: has"},
+      {s:"___ cats and dogs. (it / show)",               ans:"shows",   opts:["show","shows","showing","showes"],   r:"it → verb+s: shows"},
+      {s:"___ a lot. (the baby / cry)",                  ans:"cries",   opts:["cry","cries","crying","cryes"],      r:"it → -y→ies: cries"},
+      {s:"___ at 7 o'clock. (my mum / wake up)",        ans:"wakes up",opts:["wake up","wakes up","waking up","waked up"],r:"she → verb+s: wakes up"},
+      {s:"___ to music every day. (he / listen)",        ans:"listens", opts:["listen","listens","listening","listenes"],r:"he → verb+s: listens"},
+      {s:"___ in the park. (the dog / run)",             ans:"runs",    opts:["run","runs","running","runes"],      r:"it → verb+s: runs"},
+      {s:"___ breakfast at 7. (she / eat)",              ans:"eats",    opts:["eat","eats","eating","eates"],       r:"she → verb+s: eats"},
+      {s:"___ a bike to school. (he / ride)",            ans:"rides",   opts:["ride","rides","riding","ridees"],    r:"he → verb+s: rides"}
+    ],
+    fg: [
+      {s:"She ___ (to live) in a small house.",          ans:"lives",   r:"she → verb+s: lives"},
+      {s:"He ___ (to play) basketball after school.",    ans:"plays",   r:"he → verb+s: plays"},
+      {s:"The cat ___ (to sleep) all day.",              ans:"sleeps",  r:"it → verb+s: sleeps"},
+      {s:"We ___ (to walk) to school every day.",        ans:"walk",    r:"we → no -s: walk"},
+      {s:"My sister ___ (to have) a pet rabbit.",        ans:"has",     r:"she → irregular: has"},
+      {s:"He ___ (to go) swimming on Fridays.",          ans:"goes",    r:"he → -o+es: goes"},
+      {s:"She ___ (to watch) TV after dinner.",          ans:"watches", r:"she → -ch+es: watches"},
+      {s:"They ___ (to speak) English at school.",       ans:"speak",   r:"they → no -s: speak"},
+      {s:"My dad ___ (to work) in an office.",           ans:"works",   r:"he → verb+s: works"},
+      {s:"The bird ___ (to fly) south in winter.",       ans:"flies",   r:"it → -y→ies: flies"},
+      {s:"I ___ (to like) chocolate ice cream.",         ans:"like",    r:"I → no -s: like"},
+      {s:"She ___ (to do) her homework after school.",   ans:"does",    r:"she → irregular: does"},
+      {s:"He ___ (to ride) his bike to school.",         ans:"rides",   r:"he → verb+s: rides"},
+      {s:"My mum ___ (to cook) dinner every evening.",   ans:"cooks",   r:"she → verb+s: cooks"},
+      {s:"The dog ___ (to bark) at strangers.",          ans:"barks",   r:"it → verb+s: barks"},
+      {s:"We ___ (to eat) lunch at school.",             ans:"eat",     r:"we → no -s: eat"},
+      {s:"She ___ (to carry) a big bag.",                ans:"carries", r:"she → -y→ies: carries"},
+      {s:"He ___ (to brush) his teeth twice a day.",     ans:"brushes", r:"he → -sh+es: brushes"},
+      {s:"They ___ (to play) football on weekends.",     ans:"play",    r:"they → no -s: play"},
+      {s:"My friend ___ (to live) near the school.",     ans:"lives",   r:"he/she → verb+s: lives"}
+    ],
+    wp: [
+      {s:"___ plays football every Saturday.",   opts:["I","He","They","We"],   ans:"He",   r:"He = male, singular → verb+s"},
+      {s:"___ live in a flat in London.",        opts:["He","She","They","It"],  ans:"They", r:"They = plural → no -s"},
+      {s:"___ has a cat and a dog.",             opts:["I","They","She","We"],   ans:"She",  r:"She = female, singular → has"},
+      {s:"___ goes to school by bus.",           opts:["They","He","I","We"],    ans:"He",   r:"He = male → goes"},
+      {s:"___ eat pizza on Fridays.",            opts:["He","She","We","It"],    ans:"We",   r:"We = plural → no -s"},
+      {s:"___ sleeps on the sofa all day.",      opts:["I","We","They","It"],    ans:"It",   r:"It = animal/thing → verb+s"},
+      {s:"___ ride our bikes to school.",        opts:["He","She","It","We"],    ans:"We",   r:"We = plural → no -s"},
+      {s:"___ likes chocolate very much.",       opts:["They","We","She","I"],   ans:"She",  r:"She = female → likes"},
+      {s:"___ work in a hospital.",              opts:["He","She","It","They"],  ans:"They", r:"They = plural → no -s"},
+      {s:"___ reads a book before bed.",         opts:["I","We","He","They"],    ans:"He",   r:"He = male → reads"},
+      {s:"___ watches TV every evening.",        opts:["I","They","We","She"],   ans:"She",  r:"She = female → watches"},
+      {s:"___ drink milk every morning.",        opts:["He","She","It","I"],     ans:"I",    r:"I = first person → no -s"},
+      {s:"___ shines brightly today.",           opts:["I","He","We","It"],      ans:"It",   r:"It = the sun → shines"},
+      {s:"___ walks to school every day.",       opts:["I","They","We","She"],   ans:"She",  r:"She = female → walks"},
+      {s:"___ play in the garden after school.", opts:["He","She","It","They"],  ans:"They", r:"They = plural → no -s"}
+    ],
+    bs: [
+      {w:["She","school","walks","every","to","day"],           ans:"She walks to school every day."},
+      {w:["He","football","plays","on","Sundays"],              ans:"He plays football on Sundays."},
+      {w:["The","all","cat","day","sleeps"],                    ans:"The cat sleeps all day."},
+      {w:["We","bus","by","travel","school","to"],              ans:"We travel to school by bus."},
+      {w:["She","pizza","likes","very","much"],                 ans:"She likes pizza very much."},
+      {w:["He","every","teeth","brushes","his","morning"],      ans:"He brushes his teeth every morning."},
+      {w:["My","in","mum","works","hospital","a"],              ans:"My mum works in a hospital."},
+      {w:["The","in","dog","garden","the","runs"],              ans:"The dog runs in the garden."},
+      {w:["I","music","to","every","listen","day"],             ans:"I listen to music every day."},
+      {w:["She","book","reads","a","bed","before"],             ans:"She reads a book before bed."},
+      {w:["He","school","his","rides","bike","to"],             ans:"He rides his bike to school."},
+      {w:["They","park","in","play","the","football"],          ans:"They play football in the park."},
+      {w:["My","TV","sister","evening","every","watches"],      ans:"My sister watches TV every evening."},
+      {w:["He","office","an","in","works"],                     ans:"He works in an office."},
+      {w:["She","in","London","lives","flat","a","in"],         ans:"She lives in a flat in London."}
+    ],
+    tr: [
+      {de:"Sie geht jeden Tag zur Schule.",     ans:"She goes to school every day.",     h:"she → goes"},
+      {de:"Er spielt am Wochenende Fußball.",   ans:"He plays football at the weekend.",  h:"he → plays"},
+      {de:"Die Katze schläft den ganzen Tag.",  ans:"The cat sleeps all day.",            h:"it → sleeps"},
+      {de:"Wir essen mittags in der Schule.",   ans:"We eat lunch at school.",            h:"we → eat"},
+      {de:"Er fährt mit dem Fahrrad zur Schule.",ans:"He rides his bike to school.",      h:"he → rides"},
+      {de:"Sie hat einen Hund.",                ans:"She has a dog.",                     h:"she → has (irregular!)"},
+      {de:"Ich mag Schokoladeneis.",            ans:"I like chocolate ice cream.",        h:"I → like"},
+      {de:"Er hört jeden Tag Musik.",           ans:"He listens to music every day.",     h:"he → listens"},
+      {de:"Wir spielen nach der Schule.",       ans:"We play after school.",              h:"we → play"},
+      {de:"Sie wohnt in einem kleinen Haus.",   ans:"She lives in a small house.",        h:"she → lives"},
+      {de:"Er isst morgens Frühstück.",         ans:"He eats breakfast in the morning.",  h:"he → eats"},
+      {de:"Sie macht jeden Tag Hausaufgaben.",  ans:"She does her homework every day.",   h:"she → does (irregular!)"},
+      {de:"Der Hund bellt viel.",               ans:"The dog barks a lot.",               h:"it → barks"},
+      {de:"Sie liest ein Buch vor dem Schlafen.",ans:"She reads a book before bed.",      h:"she → reads"},
+      {de:"Er arbeitet in einem Büro.",         ans:"He works in an office.",             h:"he → works"}
+    ]
+  },
+
+  f: { // ADVANCED
+    rf: [
+      {s:"___ very well. (she / speak English)",         ans:"speaks",  opts:["speak","speaks","speaking","speakes"], r:"she → verb+s: speaks"},
+      {s:"___ the piano every afternoon. (he / practise)",ans:"practises",opts:["practise","practises","practising","practises"],r:"he → verb+s: practises"},
+      {s:"___ their homework together. (they / do)",     ans:"do",      opts:["does","do","doing","doed"],            r:"they → no -s: do"},
+      {s:"___ the bus to town on Saturdays. (she / take)",ans:"takes",  opts:["take","takes","taking","takees"],      r:"she → verb+s: takes"},
+      {s:"___ a lot about animals. (he / know)",         ans:"knows",   opts:["know","knows","knowing","knowes"],     r:"he → verb+s: knows"},
+      {s:"___ his family every Sunday. (he / visit)",    ans:"visits",  opts:["visit","visits","visiting","visites"], r:"he → verb+s: visits"},
+      {s:"___ in the school choir. (she / sing)",        ans:"sings",   opts:["sing","sings","singing","singes"],     r:"she → verb+s: sings"},
+      {s:"___ an e-mail to her friend every week. (she / write)",ans:"writes",opts:["write","writes","writing","writees"],r:"she → verb+s: writes"},
+      {s:"___ at the sports centre on Mondays. (he / train)",ans:"trains",opts:["train","trains","training","traines"],r:"he → verb+s: trains"},
+      {s:"___ different languages. (she / understand)",  ans:"understands",opts:["understand","understands","understanding","understandes"],r:"she → verb+s: understands"},
+      {s:"___ the guitar in a band. (he / play)",        ans:"plays",   opts:["play","plays","playing","playes"],     r:"he → verb+s: plays"},
+      {s:"___ their pets very much. (they / love)",      ans:"love",    opts:["loves","love","loving","lovees"],      r:"they → no -s: love"},
+      {s:"___ the shopping on Saturdays. (my mum / do)", ans:"does",    opts:["do","does","doing","doed"],            r:"she → irregular: does"},
+      {s:"___ the newspaper every morning. (he / read)", ans:"reads",   opts:["read","reads","reading","reades"],     r:"he → verb+s: reads"},
+      {s:"___ football for the school team. (she / play)",ans:"plays",  opts:["play","plays","playing","playes"],     r:"she → verb+s: plays"}
+    ],
+    fg: [
+      {s:"She ___ (to speak) three languages.",          ans:"speaks",    r:"she → verb+s: speaks"},
+      {s:"He ___ (to practise) the piano every day.",    ans:"practises", r:"he → verb+s: practises"},
+      {s:"They ___ (to travel) by train to the city.",   ans:"travel",    r:"they → no -s: travel"},
+      {s:"She ___ (to write) in her diary every evening.",ans:"writes",   r:"she → verb+s: writes"},
+      {s:"He ___ (to know) a lot about computers.",      ans:"knows",     r:"he → verb+s: knows"},
+      {s:"My parents ___ (to work) in different cities.",ans:"work",      r:"they → no -s: work"},
+      {s:"She ___ (to sing) in the school choir.",       ans:"sings",     r:"she → verb+s: sings"},
+      {s:"He ___ (to visit) his grandparents every Sunday.",ans:"visits", r:"he → verb+s: visits"},
+      {s:"The team ___ (to train) three times a week.",  ans:"trains",    r:"it → verb+s: trains"},
+      {s:"She ___ (to understand) English and French.",  ans:"understands",r:"she → verb+s: understands"},
+      {s:"He ___ (to take) the bus to school.",          ans:"takes",     r:"he → verb+s: takes"},
+      {s:"They ___ (to enjoy) camping in summer.",       ans:"enjoy",     r:"they → no -s: enjoy"},
+      {s:"She ___ (to help) her mum at home.",           ans:"helps",     r:"she → verb+s: helps"},
+      {s:"He ___ (to spend) his free time outdoors.",    ans:"spends",    r:"he → verb+s: spends"},
+      {s:"She ___ (to learn) new words every day.",      ans:"learns",    r:"she → verb+s: learns"}
+    ],
+    wp: [
+      {s:"___ speaks three languages fluently.",         opts:["I","They","She","We"],    ans:"She",  r:"She = female, singular → speaks"},
+      {s:"___ train together three times a week.",       opts:["He","She","It","They"],   ans:"They", r:"They = plural → no -s"},
+      {s:"___ writes in his diary every evening.",       opts:["I","They","He","We"],     ans:"He",   r:"He = male, singular → writes"},
+      {s:"___ enjoy camping in the summer holidays.",    opts:["He","She","It","We"],     ans:"We",   r:"We = plural → no -s"},
+      {s:"___ understands English and French.",          opts:["They","We","She","I"],    ans:"She",  r:"She = female → understands"},
+      {s:"___ visits his grandparents every Sunday.",    opts:["I","He","We","They"],     ans:"He",   r:"He = male → visits"},
+      {s:"___ travel by train to the city.",             opts:["He","She","It","They"],   ans:"They", r:"They = plural → no -s"},
+      {s:"___ sings in the school choir.",               opts:["I","They","We","She"],    ans:"She",  r:"She = female → sings"},
+      {s:"___ spends his free time outdoors.",           opts:["I","They","We","He"],     ans:"He",   r:"He = male → spends"},
+      {s:"___ help each other with homework.",           opts:["He","She","It","They"],   ans:"They", r:"They = plural → no -s"},
+      {s:"___ practises the piano every afternoon.",     opts:["They","We","I","He"],     ans:"He",   r:"He = male → practises"},
+      {s:"___ know a lot about animals.",                opts:["He","She","It","I"],      ans:"I",    r:"I = first person → no -s"},
+      {s:"___ takes the bus to town on Saturdays.",      opts:["I","We","They","She"],    ans:"She",  r:"She = female → takes"},
+      {s:"___ learn new vocabulary every day.",          opts:["He","She","It","We"],     ans:"We",   r:"We = plural → no -s"},
+      {s:"___ reads the newspaper every morning.",       opts:["I","They","We","He"],     ans:"He",   r:"He = male → reads"}
+    ],
+    bs: [
+      {w:["She","languages","speaks","three","fluently"],              ans:"She speaks three languages fluently."},
+      {w:["He","diary","writes","his","in","evening","every"],         ans:"He writes in his diary every evening."},
+      {w:["They","times","together","train","three","a","week"],       ans:"They train together three times a week."},
+      {w:["She","choir","school","sings","the","in"],                  ans:"She sings in the school choir."},
+      {w:["He","grandparents","visits","Sunday","his","every"],        ans:"He visits his grandparents every Sunday."},
+      {w:["We","summer","camping","enjoy","in","the"],                 ans:"We enjoy camping in the summer."},
+      {w:["She","French","understands","English","and"],               ans:"She understands English and French."},
+      {w:["He","outdoors","time","spends","free","his"],               ans:"He spends his free time outdoors."},
+      {w:["They","homework","help","other","each","with"],             ans:"They help each other with homework."},
+      {w:["She","new","every","learns","day","vocabulary"],            ans:"She learns new vocabulary every day."},
+      {w:["He","piano","practises","the","afternoon","every"],         ans:"He practises the piano every afternoon."},
+      {w:["We","city","the","to","train","by","travel"],               ans:"We travel by train to the city."},
+      {w:["She","Saturdays","town","takes","bus","on","the","to"],     ans:"She takes the bus to town on Saturdays."},
+      {w:["He","week","a","band","three","plays","in","times"],        ans:"He plays in a band three times a week."},
+      {w:["They","parents","their","cities","in","work","different"],  ans:"They work in different cities."}
+    ],
+    tr: [
+      {de:"Sie spricht drei Sprachen fließend.",          ans:"She speaks three languages fluently.",      h:"she → speaks"},
+      {de:"Er schreibt jeden Abend in sein Tagebuch.",    ans:"He writes in his diary every evening.",     h:"he → writes"},
+      {de:"Sie trainieren dreimal pro Woche zusammen.",   ans:"They train together three times a week.",   h:"they → train"},
+      {de:"Sie singt im Schulchor.",                      ans:"She sings in the school choir.",            h:"she → sings"},
+      {de:"Er besucht seine Großeltern jeden Sonntag.",   ans:"He visits his grandparents every Sunday.",  h:"he → visits"},
+      {de:"Wir genießen Camping im Sommer.",              ans:"We enjoy camping in the summer.",           h:"we → enjoy"},
+      {de:"Sie versteht Englisch und Französisch.",       ans:"She understands English and French.",       h:"she → understands"},
+      {de:"Er verbringt seine Freizeit draußen.",         ans:"He spends his free time outdoors.",         h:"he → spends"},
+      {de:"Sie lernen täglich neue Vokabeln.",            ans:"They learn new vocabulary every day.",      h:"they → learn"},
+      {de:"Er übt jeden Nachmittag Klavier.",             ans:"He practises the piano every afternoon.",   h:"he → practises"},
+      {de:"Wir fahren mit dem Zug in die Stadt.",         ans:"We travel by train to the city.",           h:"we → travel"},
+      {de:"Sie nimmt samstags den Bus in die Stadt.",     ans:"She takes the bus to town on Saturdays.",   h:"she → takes"},
+      {de:"Er spielt dreimal pro Woche in einer Band.",   ans:"He plays in a band three times a week.",    h:"he → plays"},
+      {de:"Sie helfen sich gegenseitig bei den Hausaufgaben.", ans:"They help each other with homework.",  h:"they → help"},
+      {de:"Sie weiß viel über Tiere.",                    ans:"She knows a lot about animals.",            h:"she → knows"}
+    ]
+  }
+};
+
+// ── STATE ────────────────────────────────────────────────────
+var lvl="a", tab="rf";
+var queues={}, cur=null;
+var tot=0, cor=0, wrg=0, str=0;
+var wordOrder=[];
+
+function shuffle(a){
+  var b=a.slice();
+  for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}
+  return b;
+}
+
+function getPool(){
+  var key=lvl+"_"+tab;
+  var pool=D[lvl][tab];
+  if(!pool||!pool.length) return null;
+  if(!queues[key]||!queues[key].length) queues[key]=shuffle(pool.slice());
+  return queues[key].pop();
+}
+
+function setLvl(l,btn){
+  lvl=l;
+  document.querySelectorAll(".lbtn").forEach(function(b){b.classList.remove("on");});
+  btn.classList.add("on");
+  next();
+}
+
+function setTab(t,btn){
+  tab=t;
+  document.querySelectorAll(".tab").forEach(function(b){b.classList.remove("on");});
+  btn.classList.add("on");
+  next();
+}
+
+function toggleRem(){
+  var b=document.getElementById("rembody");
+  var a=document.getElementById("arr");
+  var o=b.classList.toggle("open");
+  a.classList.toggle("open",o);
+}
+
+// ── RESET UI ─────────────────────────────────────────────────
+function resetUI(){
+  document.getElementById("mclist").innerHTML="";
+  document.getElementById("mclist").style.display="none";
+  document.getElementById("chips").innerHTML="";
+  document.getElementById("chips").style.display="none";
+  document.getElementById("slots").innerHTML="";
+  document.getElementById("slots").style.display="none";
+  document.getElementById("inprow").style.display="none";
+  document.getElementById("ainp").value="";
+  document.getElementById("ainp").disabled=false;
+  document.getElementById("cbtn").style.display="inline-flex";
+  document.getElementById("nbtn").style.display="none";
+  document.getElementById("fb").style.display="none";
+  document.getElementById("fb").className="fb";
+  wordOrder=[];
+  // re-add hint
+  var sl=document.getElementById("slots");
+  var h=document.createElement("span");
+  h.className="slots-hint"; h.id="shint"; h.textContent="Tap the words above ↑";
+  sl.appendChild(h);
+}
+
+// ── NEXT ─────────────────────────────────────────────────────
+function next(){
+  resetUI();
+  cur=getPool();
+  if(!cur) return;
+  var labels={rf:"🔤 Right Form – Choose the correct verb form",
+              fg:"✏️ Fill the Gap – Type the correct verb form",
+              wp:"👤 Which Pronoun? – Choose the right subject",
+              bs:"🔀 Build a Sentence – Tap words in the correct order",
+              tr:"🌍 Translate – Write the English sentence"};
+  document.getElementById("qtyp").textContent=labels[tab]||"";
+
+  if(tab==="rf"){
+    document.getElementById("qtext").innerHTML="Choose the correct form:<br><strong>"+cur.s+"</strong>";
+    showMC(cur.opts, cur.ans, cur.r);
+  } else if(tab==="fg"){
+    document.getElementById("qtext").innerHTML="Fill in the blank:<br><strong>"+cur.s+"</strong>";
+    showInp("Type the verb form...", cur.ans, cur.r);
+  } else if(tab==="wp"){
+    document.getElementById("qtext").innerHTML="Which pronoun fits?<br><strong>"+cur.s+"</strong>";
+    showMC(shuffle(cur.opts), cur.ans, cur.r);
+  } else if(tab==="bs"){
+    document.getElementById("qtext").textContent="Put the words in the correct order:";
+    showBuild(cur.w, cur.ans);
+  } else if(tab==="tr"){
+    document.getElementById("qtext").innerHTML="Translate into English:<br><em>\""+cur.de+"\"</em><br><small style='color:var(--grau)'>Hint: "+cur.h+"</small>";
+    showInp("Write the English sentence...", cur.ans, cur.h);
+  }
+}
+
+// ── MC ───────────────────────────────────────────────────────
+function showMC(opts, correct, rule){
+  var mc=document.getElementById("mclist");
+  mc.style.display="flex";
+  document.getElementById("cbtn").style.display="none";
+  opts.forEach(function(o){
+    var b=document.createElement("button");
+    b.className="mcbtn"; b.textContent=o;
+    b.onclick=function(){
+      document.querySelectorAll(".mcbtn").forEach(function(x){x.disabled=true;});
+      var ok=(o===correct);
+      if(ok){b.classList.add("ok");}
+      else{b.classList.add("no");
+        document.querySelectorAll(".mcbtn").forEach(function(x){if(x.textContent===correct)x.classList.add("ok");});}
+      result(ok, ok?"":("Correct: <strong>"+correct+"</strong> – "+rule));
+    };
+    mc.appendChild(b);
+  });
+}
+
+// ── INPUT ────────────────────────────────────────────────────
+function showInp(ph, correct, rule){
+  var row=document.getElementById("inprow");
+  row.style.display="flex";
+  var inp=document.getElementById("ainp");
+  inp.placeholder=ph;
+  inp._correct=correct;
+  inp._rule=rule;
+  inp.focus();
+}
+
+// ── BUILD ────────────────────────────────────────────────────
+function showBuild(words, correct){
+  var chipsEl=document.getElementById("chips");
+  var slotsEl=document.getElementById("slots");
+  chipsEl.style.display="flex";
+  slotsEl.style.display="flex";
+  document.getElementById("cbtn")._buildAnswer=correct;
+  shuffle(words).forEach(function(w,i){
+    var c=document.createElement("div");
+    c.className="chip"; c.textContent=w; c.dataset.i=i;
+    c.onclick=function(){addWord(c,w);};
+    chipsEl.appendChild(c);
+  });
+}
+
+function addWord(chip,w){
+  chip.classList.add("used");
+  wordOrder.push({w:w,c:chip});
+  var sl=document.getElementById("slots");
+  var hint=document.getElementById("shint");
+  if(hint) hint.remove();
+  var s=document.createElement("div");
+  s.className="slot-chip"; s.textContent=w;
+  s.onclick=function(){removeWord(s,chip);};
+  sl.appendChild(s);
+}
+
+function removeWord(slot,chip){
+  slot.remove();
+  chip.classList.remove("used");
+  wordOrder=wordOrder.filter(function(x){return x.c!==chip;});
+  if(document.getElementById("slots").children.length===0){
+    var h=document.createElement("span");
+    h.className="slots-hint"; h.id="shint"; h.textContent="Tap the words above ↑";
+    document.getElementById("slots").appendChild(h);
+  }
+}
+
+// ── CHECK ────────────────────────────────────────────────────
+function check(){
+  if(tab==="bs"){
+    var given=wordOrder.map(function(x){return x.w;}).join(" ");
+    var correct=document.getElementById("cbtn")._buildAnswer||"";
+    var ok=(given.toLowerCase().replace(/[.?!]/g,"").trim()===correct.toLowerCase().replace(/[.?!]/g,"").trim());
+    document.querySelectorAll(".chip").forEach(function(c){c.onclick=null;c.style.opacity=".4";});
+    document.querySelectorAll(".slot-chip").forEach(function(c){c.onclick=null;});
+    result(ok, ok?"":"Correct order: <strong>"+correct+"</strong>");
+    return;
+  }
+  var inp=document.getElementById("ainp");
+  var given=inp.value.trim();
+  if(!given){inp.focus();return;}
+  var correct=inp._correct||"";
+  var rule=inp._rule||"";
+  var ok=(given.toLowerCase()===correct.toLowerCase());
+  inp.disabled=true;
+  result(ok, ok?"":"Correct answer: <strong>"+correct+"</strong>"+(rule?" – "+rule:""));
+}
+
+// ── RESULT ───────────────────────────────────────────────────
+function result(ok, hint){
+  tot++; if(ok){cor++;str++;}else{wrg++;str=0;}
+  updateScore();
+  document.getElementById("cbtn").style.display="none";
+  document.getElementById("nbtn").style.display="inline-flex";
+  var fb=document.getElementById("fb");
+  fb.style.display="block";
+  if(ok){
+    var msgs=["✅ Excellent! Well done! 🎉","✅ Perfect! Great job! ⭐","✅ Correct! Keep it up! 🚀","✅ Brilliant! 🌟"];
+    fb.className="fb ok";
+    fb.innerHTML=msgs[Math.floor(Math.random()*msgs.length)];
+  } else {
+    fb.className="fb no";
+    fb.innerHTML="❌ Not quite. "+(hint||"")+"<br><small>Check the Quick Reminder above!</small>";
+  }
+}
+
+function updateScore(){
+  document.getElementById("zg").textContent=tot;
+  document.getElementById("zr").textContent=cor;
+  document.getElementById("zf").textContent=wrg;
+  document.getElementById("zs").textContent=str>0?"🔥".repeat(Math.min(str,5)):"0";
+}
+
+window.onload=function(){next();};
+</script>
+</body>
+</html>
