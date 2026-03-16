@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rechnen mit Geld – Mathe 5b</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blau: #64B5F6;
+  --dunkelblau: #1565C0;
+  --mittelblau: #1976D2;
+  --hellblau: #BBDEFB;
+  --gruen: #06D6A0;
+  --dunkelgruen: #028A5B;
+  --rot: #FF5252;
+  --gelb: #FFD93D;
+  --weiss: #FFFFFF;
+  --text: #1A2A3A;
+  --grau: #7AAABB;
+  --schatten: rgba(21,101,192,.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Quicksand', sans-serif;
+  color: var(--text); min-height: 100vh; padding-bottom: 60px;
+  background: linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 50%, #90CAF9 100%);
+}
+a.zurueck {
+  display: inline-flex; align-items: center; gap: 8px; margin: 20px 24px;
+  font-family: 'Baloo 2', cursive; font-size: .9rem; font-weight: 700;
+  color: var(--dunkelblau); background: rgba(255,255,255,.65);
+  border-radius: 50px; padding: 8px 20px; text-decoration: none;
+  box-shadow: 0 2px 10px rgba(21,101,192,.15); transition: background .2s, transform .2s;
+}
+a.zurueck:hover { background: rgba(255,255,255,.9); transform: translateX(-3px); }
+header { text-align: center; padding: 8px 20px 20px; }
+.fach-badge {
+  display: inline-block; background: rgba(255,255,255,.7); color: var(--dunkelblau);
+  border-radius: 40px; padding: 5px 18px; font-size: .78rem; font-weight: 700;
+  letter-spacing: .6px; text-transform: uppercase; margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(21,101,192,.2);
+}
+header h1 {
+  font-family: 'Baloo 2', cursive; font-size: clamp(1.8rem,5vw,2.8rem);
+  font-weight: 800; color: var(--dunkelblau); margin-bottom: 4px;
+}
+header p { font-size: .9rem; color: var(--grau); font-weight: 600; }
+
+.karte {
+background: var(–weiss); border-radius: 22px; padding: 22px 24px;
+max-width: 720px; margin: 0 auto 16px;
+box-shadow: 0 8px 32px var(–schatten); border: 2px solid rgba(100,181,246,.15);
+}
+
+/* PUNKTE */
+.punkte-leiste {
+display: flex; gap: 10px; flex-wrap: wrap;
+background: rgba(100,181,246,.1); border-radius: 14px;
+padding: 10px 16px; margin-bottom: 18px; border: 1.5px solid rgba(100,181,246,.25);
+}
+.punkte-block { text-align: center; flex: 1; }
+.punkte-label { font-size: .7rem; font-weight: 700; color: var(–grau); text-transform: uppercase; }
+.punkte-zahl  { font-family: ‘Baloo 2’, cursive; font-size: 1.2rem; font-weight: 800; color: var(–dunkelblau); }
+.punkte-zahl.g { color: var(–dunkelgruen); }
+.punkte-zahl.r { color: #C0392B; }
+
+/* LEVEL */
+.level-zeile { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.level-btn {
+font-family: ‘Baloo 2’, cursive; font-size: .95rem; font-weight: 700;
+padding: 10px 28px; border-radius: 50px;
+border: 2.5px solid rgba(100,181,246,.4); background: rgba(255,255,255,.5); color: var(–dunkelblau);
+cursor: pointer; transition: all .2s;
+}
+.level-btn:hover { background: rgba(255,255,255,.8); }
+.level-btn.aktiv { background: var(–weiss); border-color: var(–blau); box-shadow: 0 4px 16px rgba(21,101,192,.2); }
+
+/* AUFGABENTYP TABS */
+.typ-tabs { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+.typ-tab {
+padding: 8px 15px; border-radius: 50px;
+border: 2px solid rgba(100,181,246,.3); background: #EFF7FF;
+color: var(–grau); font-family: ‘Baloo 2’, cursive; font-size: .82rem; font-weight: 700;
+cursor: pointer; transition: all .2s;
+}
+.typ-tab:hover { border-color: var(–blau); color: var(–dunkelblau); }
+.typ-tab.aktiv { background: linear-gradient(135deg,var(–blau),var(–dunkelblau)); color: #fff; border-color: transparent; box-shadow: 0 3px 12px rgba(21,101,192,.25); }
+
+/* AUFGABE */
+.aufgabe-box {
+background: rgba(100,181,246,.07); border: 2px solid rgba(100,181,246,.25);
+border-radius: 20px; padding: 22px;
+}
+.aufgabe-typ-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(–grau); margin-bottom: 8px; }
+.aufgabe-text { font-size: 1.05rem; font-weight: 700; color: var(–text); line-height: 1.7; margin-bottom: 16px; }
+.aufgabe-text strong { color: var(–dunkelblau); }
+.aufgabe-text em { font-style: italic; color: #555; }
+
+/* Sachaufgaben-Highlight */
+.sach-box {
+background: rgba(100,181,246,.1); border-left: 4px solid var(–blau);
+border-radius: 0 12px 12px 0; padding: 12px 16px; margin-bottom: 14px;
+font-size: .95rem; font-weight: 700; color: var(–dunkelblau); line-height: 1.65;
+}
+
+/* MC */
+.mc-liste { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.mc-btn {
+padding: 12px 16px; border-radius: 12px; border: 2px solid rgba(100,181,246,.25);
+background: #fff; color: var(–text);
+font-family: ‘Quicksand’, sans-serif; font-size: .95rem; font-weight: 700;
+cursor: pointer; transition: all .2s; text-align: left;
+}
+.mc-btn:hover:not(:disabled) { border-color: var(–blau); background: rgba(100,181,246,.08); }
+.mc-btn.richtig { background: rgba(6,214,160,.12); border-color: #06D6A0; color: #028A5B; }
+.mc-btn.falsch  { background: rgba(255,82,82,.09); border-color: var(–rot); color: #C0392B; }
+.mc-btn:disabled { cursor: default; }
+
+/* Eingabe */
+.eingabe-zeile { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.antwort-eingabe {
+flex: 1; min-width: 140px; padding: 12px 16px; border-radius: 14px;
+border: 2px solid rgba(100,181,246,.3);
+font-family: ‘Quicksand’, sans-serif; font-size: 1rem; font-weight: 700;
+color: var(–text); outline: none; background: #fff; transition: border-color .2s;
+}
+.antwort-eingabe:focus { border-color: var(–blau); }
+.einheit-label { font-size: .9rem; font-weight: 700; color: var(–dunkelblau); white-space: nowrap; }
+
+/* Tipp */
+.tipp-box {
+display: none; background: rgba(255,217,61,.1); border: 2px solid rgba(255,217,61,.4);
+border-radius: 12px; padding: 9px 13px; margin-bottom: 12px;
+font-size: .82rem; font-weight: 600; color: #6B4700; line-height: 1.5;
+}
+
+/* Buttons */
+.btn-zeile { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.check-btn {
+padding: 11px 24px; border-radius: 50px; border: none;
+background: linear-gradient(135deg,var(–blau),var(–dunkelblau)); color: #fff;
+font-family: ‘Baloo 2’, cursive; font-size: .95rem; font-weight: 700;
+cursor: pointer; box-shadow: 0 4px 14px rgba(21,101,192,.3); transition: filter .2s, transform .15s;
+}
+.check-btn:hover { filter: brightness(1.08); transform: scale(1.03); }
+.weiter-btn {
+display: none; padding: 11px 24px; border-radius: 50px; border: none;
+background: linear-gradient(135deg,var(–gruen),var(–dunkelgruen)); color: #fff;
+font-family: ‘Baloo 2’, cursive; font-size: .95rem; font-weight: 700;
+cursor: pointer; box-shadow: 0 4px 14px rgba(6,214,160,.3); transition: filter .2s, transform .15s;
+}
+.weiter-btn:hover { filter: brightness(1.08); transform: scale(1.03); }
+.tipp-btn {
+padding: 9px 18px; border-radius: 50px;
+border: 2px solid rgba(255,217,61,.5); background: rgba(255,217,61,.15);
+color: #7A5000; font-family: ‘Baloo 2’, cursive; font-size: .85rem; font-weight: 700;
+cursor: pointer; transition: all .2s;
+}
+.tipp-btn:hover { background: rgba(255,217,61,.3); }
+
+/* Rückmeldung */
+.rueckmeldung {
+display: none; border-radius: 14px; padding: 13px 16px;
+font-size: .9rem; font-weight: 600; margin-top: 12px; line-height: 1.6;
+}
+.rueckmeldung.gut    { background: rgba(6,214,160,.1);  color: #027A50; border: 2px solid rgba(6,214,160,.25); }
+.rueckmeldung.falsch { background: rgba(255,82,82,.09); color: #C0392B; border: 2px solid rgba(255,82,82,.2); }
+
+/* Münzen-Animation */
+.muenze {
+position: fixed; font-size: 1.8rem; pointer-events: none;
+animation: muenzFall 1.2s ease forwards; z-index: 9999;
+}
+@keyframes muenzFall {
+0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+100% { opacity: 0; transform: translateY(-120px) rotate(360deg) scale(1.4); }
+}
+
+footer { text-align: center; padding: 10px 20px 40px; font-size: .75rem; font-weight: 700; color: rgba(21,101,192,.4); }
+@media(max-width:520px) { .karte { padding: 16px 14px; } .typ-tabs { gap: 5px; } }
+</style>
+
+</head>
+<body>
+
+<a href="index.html" class="zurueck">← Zurück zur Startseite</a>
+
+<header>
+  <div class="fach-badge">📘 Mathe · 5b · Rechnen mit Geld</div>
+  <h1>💰 Rechnen mit Geld</h1>
+  <p>Wähle dein Level und einen Aufgabentyp!</p>
+</header>
+
+<div class="karte">
+  <!-- Punkte -->
+  <div class="punkte-leiste">
+    <div class="punkte-block"><div class="punkte-label">Aufgaben</div><div class="punkte-zahl" id="z-gesamt">0</div></div>
+    <div class="punkte-block"><div class="punkte-label">Richtig ✓</div><div class="punkte-zahl g" id="z-richtig">0</div></div>
+    <div class="punkte-block"><div class="punkte-label">Falsch ✗</div><div class="punkte-zahl r" id="z-falsch">0</div></div>
+    <div class="punkte-block"><div class="punkte-label">Punkte 🏆</div><div class="punkte-zahl" id="z-punkte">0</div></div>
+  </div>
+
+  <!-- Level -->
+
+  <div class="level-zeile">
+    <button class="level-btn aktiv" id="btn-a" onclick="setLevel('anfaenger',this)">🐣 Einfach</button>
+    <button class="level-btn"       id="btn-f" onclick="setLevel('fortgeschritten',this)">🚀 Schwerer</button>
+  </div>
+
+  <!-- Aufgabentyp Tabs -->
+
+  <div class="typ-tabs" id="typ-tabs">
+    <button class="typ-tab aktiv" data-typ="rechnen"   onclick="setTyp('rechnen',this)">🔢 Grundrechnen</button>
+    <button class="typ-tab"       data-typ="wechsel"   onclick="setTyp('wechsel',this)">💵 Wechselgeld</button>
+    <button class="typ-tab"       data-typ="umrechnen" onclick="setTyp('umrechnen',this)">🔄 Umrechnen</button>
+    <button class="typ-tab"       data-typ="sach"      onclick="setTyp('sach',this)">📖 Sachaufgabe</button>
+    <button class="typ-tab"       data-typ="vergleich" onclick="setTyp('vergleich',this)">⚖️ Vergleichen</button>
+  </div>
+
+  <!-- Aufgabe -->
+
+  <div class="aufgabe-box">
+    <div class="aufgabe-typ-label" id="aufgabe-typ-label"></div>
+    <div class="aufgabe-text"      id="aufgabe-text"></div>
+    <div class="sach-box"          id="sach-box" style="display:none"></div>
+    <div class="tipp-box"          id="tipp-box"></div>
+    <div class="mc-liste"          id="mc-liste"></div>
+    <div class="eingabe-zeile"     id="eingabe-zeile" style="display:none">
+      <input type="number" step="0.01" class="antwort-eingabe" id="antwort-eingabe"
+             placeholder="0,00" onkeydown="if(event.key==='Enter') checkAntwort()" />
+      <span class="einheit-label" id="einheit-label">€</span>
+    </div>
+    <div class="btn-zeile">
+      <button class="check-btn"  id="check-btn"  onclick="checkAntwort()">✓ Prüfen</button>
+      <button class="weiter-btn" id="weiter-btn" onclick="naechste()">Nächste Aufgabe →</button>
+      <button class="tipp-btn"   id="tipp-btn"   onclick="zeigeTipp()">💡 Tipp</button>
+    </div>
+    <div class="rueckmeldung" id="rueckmeldung"></div>
+  </div>
+</div>
+
+<footer>Klasse 5b · Mathe · Rechnen mit Geld 💰</footer>
+<script src="mathe_geld.js"></script>
+</body>
+</html>
