@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Längeneinheiten – 5. Klasse</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f7ff;
+    --card: #ffffff;
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --secondary: #7c3aed;
+    --secondary-light: #ede9fe;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --error: #dc2626;
+    --error-light: #fee2e2;
+    --warning: #d97706;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 4px 24px rgba(37,99,235,0.10);
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image: radial-gradient(circle at 20% 20%, #bfdbfe55 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, #ede9fe55 0%, transparent 50%);
+  }
+  .header {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    color: white;
+    padding: 28px 20px 24px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+  }
+  .header h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    font-weight: 800;
+  }
+  .header p { font-size: 0.95rem; opacity: 0.88; margin-top: 4px; }
+  .ruler-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .unit-badge {
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.35);
+    border-radius: 30px;
+    padding: 4px 14px;
+    font-weight: 800;
+    font-size: 0.95rem;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 28px 16px 60px; }
+
+  /* LEVEL */
+  .level-switcher {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 26px;
+    background: white;
+    border-radius: 50px;
+    padding: 6px;
+    box-shadow: var(--shadow);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .level-btn {
+    border: none;
+    border-radius: 50px;
+    padding: 10px 26px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    color: var(--text-muted);
+    background: transparent;
+  }
+  .level-btn.active-anf {
+    background: linear-gradient(135deg, #2563eb, #60a5fa);
+    color: white;
+    box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+  }
+  .level-btn.active-fort {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    color: white;
+    box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+  }
+  .level-label {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  /* TABS */
+  .category-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .cat-btn {
+    border: 2px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    color: var(--text-muted);
+  }
+  .cat-btn.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+  .cat-btn.active.cat-fort { background: var(--secondary-light); border-color: var(--secondary); color: var(--secondary); }
+
+  /* SCORE */
+  .score-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-radius: 14px;
+    padding: 12px 20px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .score-item { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem; }
+  .score-icon { font-size: 1.3rem; }
+  .score-val { color: var(--primary); font-size: 1.15rem; }
+  .score-val.green { color: var(--success); }
+  .score-val.red { color: var(--error); }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 30px 28px 26px;
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+    border: 2px solid transparent;
+    transition: border 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .question-card.correct { border-color: var(--success); }
+  .question-card.wrong { border-color: var(--error); }
+  .question-type-tag {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 14px;
+  }
+  .question-type-tag.fort { background: var(--secondary-light); color: var(--secondary); }
+  .question-text {
+    font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1.6;
+    margin-bottom: 22px;
+    color: var(--text);
+    white-space: pre-line;
+  }
+  .question-hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border-left: 3px solid var(--primary);
+  }
+
+  /* OPTIONS */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  @media (max-width: 480px) { .options-grid { grid-template-columns: 1fr; } }
+  .option-btn {
+    border: 2.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafbfc;
+    color: var(--text);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37,99,235,0.12);
+  }
+  .option-btn.selected-correct { border-color: var(--success); background: var(--success-light); color: var(--success); }
+  .option-btn.selected-wrong { border-color: var(--error); background: var(--error-light); color: var(--error); }
+  .option-btn.reveal-correct { border-color: var(--success); background: var(--success-light); color: var(--success); }
+  .option-btn:disabled { cursor: default; }
+  .option-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .option-btn.selected-correct .option-letter { background: var(--success); color: white; }
+  .option-btn.selected-wrong .option-letter { background: var(--error); color: white; }
+  .option-btn.reveal-correct .option-letter { background: var(--success); color: white; }
+
+  /* FEEDBACK */
+  .feedback-box {
+    border-radius: 12px;
+    padding: 13px 16px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-top: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .feedback-box.correct { background: var(--success-light); color: #14532d; border-left: 4px solid var(--success); }
+  .feedback-box.wrong { background: var(--error-light); color: #7f1d1d; border-left: 4px solid var(--error); }
+  .feedback-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  /* NEXT BUTTON */
+  .next-btn {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    margin-top: 16px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+  }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.3); }
+
+  /* TABLE */
+  .table-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 22px;
+    overflow-x: auto;
+  }
+  .table-card h3 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.15rem;
+    color: var(--primary);
+    margin-bottom: 14px;
+  }
+  .conv-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 460px; }
+  .conv-table th {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 800;
+  }
+  .conv-table th:first-child { border-radius: 10px 0 0 10px; }
+  .conv-table th:last-child { border-radius: 0 10px 10px 0; }
+  .conv-table td { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--border); font-weight: 600; }
+  .conv-table tr:last-child td { border-bottom: none; }
+  .conv-table tr:nth-child(even) td { background: #f8fafc; }
+  .conv-table .hl { font-weight: 800; color: var(--primary); }
+
+  /* MERKHILFE */
+  .merkhilfe {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 22px;
+    border-left: 4px solid var(--warning);
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #78350f;
+  }
+  .merkhilfe strong { display: block; margin-bottom: 6px; font-size: 1rem; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 22px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .progress-track { height: 8px; background: var(--border); border-radius: 100px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 100px; transition: width 0.4s ease; }
+
+  @keyframes pop { 0%{transform:scale(0.88);opacity:0} 60%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+  .pop { animation: pop 0.3s ease forwards; }
+
+  @media(max-width:600px) {
+    .question-card { padding: 20px 16px 18px; }
+    .score-bar { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📏 Längeneinheiten</h1>
+  <p>5. Klasse Mittelschule Bayern · Lern- und Übungsapp</p>
+  <div class="ruler-bar">
+    <span class="unit-badge">mm</span>
+    <span class="unit-badge">cm</span>
+    <span class="unit-badge">dm</span>
+    <span class="unit-badge">m</span>
+    <span class="unit-badge">km</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="level-switcher">
+    <button class="level-btn active-anf" id="btnAnf" onclick="setLevel('anfaenger')">🌱 Anfänger</button>
+    <button class="level-btn" id="btnFort" onclick="setLevel('fortgeschritten')">🚀 Fortgeschritten</button>
+  </div>
+  <div class="level-label" id="levelLabel">Anfänger: Einfache Umrechnungen und Grundaufgaben</div>
+
+  <div class="table-card">
+    <h3>📐 Umrechnungstabelle</h3>
+    <table class="conv-table">
+      <thead>
+        <tr><th>Einheit</th><th>mm</th><th>cm</th><th>dm</th><th>m</th><th>km</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="hl">1 mm</td><td>1</td><td>0,1</td><td>0,01</td><td>0,001</td><td>0,000001</td></tr>
+        <tr><td class="hl">1 cm</td><td>10</td><td>1</td><td>0,1</td><td>0,01</td><td>0,00001</td></tr>
+        <tr><td class="hl">1 dm</td><td>100</td><td>10</td><td>1</td><td>0,1</td><td>0,0001</td></tr>
+        <tr><td class="hl">1 m</td><td>1.000</td><td>100</td><td>10</td><td>1</td><td>0,001</td></tr>
+        <tr><td class="hl">1 km</td><td>1.000.000</td><td>100.000</td><td>10.000</td><td>1.000</td><td>1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="merkhilfe">
+    <strong>💡 Merkhilfe: „Kleine Männer Dürfen Coole Musik hören"</strong>
+    km → m → dm → cm → mm &nbsp;·&nbsp; ÷ 10 pro Schritt nach rechts &nbsp;·&nbsp; × 10 pro Schritt nach links
+  </div>
+
+  <div class="category-tabs">
+    <button class="cat-btn active" id="tab-umrechnen" onclick="setCategory('umrechnen')">🔄 Umrechnen</button>
+    <button class="cat-btn" id="tab-zusammen" onclick="setCategory('zusammen')">➕ Zusammenrechnen</button>
+    <button class="cat-btn" id="tab-vergleich" onclick="setCategory('vergleich')">⚖️ Größer / Kleiner</button>
+  </div>
+
+  <div class="score-bar">
+    <div class="score-item"><span class="score-icon">🎯</span><span>Aufgabe</span><span class="score-val" id="qNum">1</span></div>
+    <div class="score-item"><span class="score-icon">✅</span><span>Richtig</span><span class="score-val green" id="correct">0</span></div>
+    <div class="score-item"><span class="score-icon">❌</span><span>Falsch</span><span class="score-val red" id="wrong">0</span></div>
+    <div class="score-item"><span class="score-icon">⭐</span><span>Punkte</span><span class="score-val" id="points">0</span></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Trefferquote</span><span id="progressPct">–</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div id="questionArea"></div>
+
+</div>
+
+<script>
+// ─── STATE ───
+let level = 'anfaenger';
+let category = 'umrechnen';
+let stats = { correct: 0, wrong: 0, points: 0, total: 0 };
+let answered = false;
+let currentQ = null;
+const LETTERS = ['A','B','C','D'];
+
+// ─── MATH HELPERS ───
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+const FACTORS = { mm:1, cm:10, dm:100, m:1000, km:1000000 };
+
+function convert(val, from, to) {
+  return (val * FACTORS[from]) / FACTORS[to];
+}
+
+function fmtNum(n) {
+  if (typeof n !== 'number') return String(n);
+  let r = Math.round(n * 100000) / 100000;
+  return r.toLocaleString('de-DE', { maximumFractionDigits: 5 });
+}
+
+// ─── WRONG ANSWER GENERATOR ───
+function wrongAnswers(correct, count) {
+  const set = new Set();
+  const mults = [0.1, 0.01, 10, 100, 1000, 0.001, 0.5, 2, 5, 0.2];
+  const offs  = [1, 2, 5, 10, 0.5, 0.1, 0.01, -1, -2, -5, -10, 50, 100];
+  let tries = 0;
+  while (set.size < count && tries < 300) {
+    tries++;
+    let c;
+    if (Math.random() < 0.6) c = correct * pick(mults);
+    else c = correct + pick(offs);
+    c = Math.round(c * 100000) / 100000;
+    const s = fmtNum(c);
+    if (c > 0 && s !== fmtNum(correct)) set.add(s);
+  }
+  // fallback fillers
+  const fallbacks = [fmtNum(correct*10), fmtNum(correct/10), fmtNum(correct+1), fmtNum(correct*100)];
+  for (const f of fallbacks) {
+    if (set.size >= count) break;
+    if (f !== fmtNum(correct)) set.add(f);
+  }
+  return [...set].slice(0, count);
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function makeMC(label, text, hint, correct, expla) {
+  const correctStr = fmtNum(correct);
+  const wrongs = wrongAnswers(correct, 3);
+  return {
+    typeLabel: label,
+    text, hint,
+    correct: correctStr,
+    options: shuffle([correctStr, ...wrongs]),
+    expla: expla || ''
+  };
+}
+
+// ────────────────────────────────────────────────────
+// ANFÄNGER – UMRECHNEN
+// ────────────────────────────────────────────────────
+function genUmrechnenAnf() {
+  const templates = [
+    () => { const v=pick([1,2,3,4,5,6,7,8,9,10,12,15,20,25,30,40,50]); return makeMC('Umrechnen', `${v} cm = _____ mm`, '1 cm = 10 mm', convert(v,'cm','mm'), `${v} cm × 10 = ${fmtNum(convert(v,'cm','mm'))} mm`); },
+    () => { const v=pick([1,2,3,4,5,6,7,8,9,10,12,15,20]); return makeMC('Umrechnen', `${v} dm = _____ cm`, '1 dm = 10 cm', convert(v,'dm','cm'), `${v} dm × 10 = ${fmtNum(convert(v,'dm','cm'))} cm`); },
+    () => { const v=pick([1,2,3,4,5,6,7,8,9,10]); return makeMC('Umrechnen', `${v} m = _____ cm`, '1 m = 100 cm', convert(v,'m','cm'), `${v} m × 100 = ${fmtNum(convert(v,'m','cm'))} cm`); },
+    () => { const v=pick([1,2,3,4,5,6,7,8,9,10,15,20]); return makeMC('Umrechnen', `${v} m = _____ dm`, '1 m = 10 dm', convert(v,'m','dm'), `${v} m × 10 = ${fmtNum(convert(v,'m','dm'))} dm`); },
+    () => { const v=pick([1,2,3,4,5,6,7,8,9,10]); return makeMC('Umrechnen', `${v} km = _____ m`, '1 km = 1.000 m', convert(v,'km','m'), `${v} km × 1000 = ${fmtNum(convert(v,'km','m'))} m`); },
+    () => { const v=pick([10,20,30,40,50,60,70,80,90,100,150,200]); return makeMC('Umrechnen', `${v} mm = _____ cm`, '10 mm = 1 cm', convert(v,'mm','cm'), `${v} mm ÷ 10 = ${fmtNum(convert(v,'mm','cm'))} cm`); },
+    () => { const v=pick([10,20,30,40,50,60,70,80,90,100]); return makeMC('Umrechnen', `${v} cm = _____ dm`, '10 cm = 1 dm', convert(v,'cm','dm'), `${v} cm ÷ 10 = ${fmtNum(convert(v,'cm','dm'))} dm`); },
+    () => { const v=pick([10,20,30,40,50,60,70,80,90,100]); return makeMC('Umrechnen', `${v} dm = _____ m`, '10 dm = 1 m', convert(v,'dm','m'), `${v} dm ÷ 10 = ${fmtNum(convert(v,'dm','m'))} m`); },
+    () => { const v=pick([1000,2000,3000,4000,5000,6000,7000,8000,9000,10000]); return makeMC('Umrechnen', `${fmtNum(v)} m = _____ km`, '1000 m = 1 km', convert(v,'m','km'), `${fmtNum(v)} m ÷ 1000 = ${fmtNum(convert(v,'m','km'))} km`); },
+    () => { const v=pick([1,2,3,4,5,6,7,8,9,10]); return makeMC('Umrechnen', `${v} dm = _____ mm`, '1 dm = 100 mm', convert(v,'dm','mm'), `${v} dm × 100 = ${fmtNum(convert(v,'dm','mm'))} mm`); },
+    () => { const v=pick([100,200,300,400,500]); return makeMC('Umrechnen', `${v} cm = _____ m`, '100 cm = 1 m', convert(v,'cm','m'), `${v} cm ÷ 100 = ${fmtNum(convert(v,'cm','m'))} m`); },
+    () => { const v=pick([1,2,3,4,5,6,7,8,9,10]); return makeMC('Umrechnen', `${v} m = _____ mm`, '1 m = 1.000 mm', convert(v,'m','mm'), `${v} m × 1000 = ${fmtNum(convert(v,'m','mm'))} mm`); },
+  ];
+  return pick(templates)();
+}
+
+// ────────────────────────────────────────────────────
+// FORTGESCHRITTEN – UMRECHNEN
+// ────────────────────────────────────────────────────
+function genUmrechnenFort() {
+  const templates = [
+    () => { const v=pick([1,2,3,5,10]); return makeMC('Umrechnen (Fortg.)', `${v} km = _____ cm`, 'km → m → cm (× 1000 × 100)', convert(v,'km','cm'), `${v} km × 1.000 × 100 = ${fmtNum(convert(v,'km','cm'))} cm`); },
+    () => { const v=pick([1,2,3,5,10]); return makeMC('Umrechnen (Fortg.)', `${v} km = _____ dm`, 'km → m → dm', convert(v,'km','dm'), `${v} × 10.000 = ${fmtNum(convert(v,'km','dm'))} dm`); },
+    () => { const v=pick([1,2,3,4,5,6,7,8,9,10]); return makeMC('Umrechnen (Fortg.)', `${v} m = _____ mm`, '1 m = 1.000 mm', convert(v,'m','mm'), `${v} m × 1.000 = ${fmtNum(convert(v,'m','mm'))} mm`); },
+    () => { const v=pick([50,100,150,200,250,300,500]); return makeMC('Umrechnen (Fortg.)', `${v} cm = _____ m`, '100 cm = 1 m', convert(v,'cm','m'), `${v} ÷ 100 = ${fmtNum(convert(v,'cm','m'))} m`); },
+    () => { const v=pick([1000,2000,3000,5000,10000]); return makeMC('Umrechnen (Fortg.)', `${fmtNum(v)} mm = _____ m`, '1.000 mm = 1 m', convert(v,'mm','m'), `${fmtNum(v)} ÷ 1.000 = ${fmtNum(convert(v,'mm','m'))} m`); },
+    () => { const v=pick([1000,2000,5000,10000]); return makeMC('Umrechnen (Fortg.)', `${fmtNum(v)} dm = _____ km`, '10.000 dm = 1 km', convert(v,'dm','km'), `${fmtNum(v)} ÷ 10.000 = ${fmtNum(convert(v,'dm','km'))} km`); },
+    () => { const v=pick([1,2,3,5]); return makeMC('Umrechnen (Fortg.)', `${v} km = _____ mm`, '1 km = 1.000.000 mm', convert(v,'km','mm'), `${v} × 1.000.000 = ${fmtNum(convert(v,'km','mm'))} mm`); },
+    () => { const v=pick([500000,1000000,2000000]); return makeMC('Umrechnen (Fortg.)', `${fmtNum(v)} mm = _____ km`, '1.000.000 mm = 1 km', convert(v,'mm','km'), `${fmtNum(v)} ÷ 1.000.000 = ${fmtNum(convert(v,'mm','km'))} km`); },
+    () => { const v=pick([5,10,15,20,25,50]); return makeMC('Umrechnen (Fortg.)', `${v} dm = _____ mm`, '1 dm = 100 mm', convert(v,'dm','mm'), `${v} × 100 = ${fmtNum(convert(v,'dm','mm'))} mm`); },
+    () => { const v=rand(2,9)*500; return makeMC('Umrechnen (Fortg.)', `${fmtNum(v)} mm = _____ dm`, '100 mm = 1 dm', convert(v,'mm','dm'), `${fmtNum(v)} ÷ 100 = ${fmtNum(convert(v,'mm','dm'))} dm`); },
+  ];
+  return pick(templates)();
+}
+
+// ────────────────────────────────────────────────────
+// ANFÄNGER – ZUSAMMENRECHNEN
+// ────────────────────────────────────────────────────
+function genZusammenAnf() {
+  const templates = [
+    () => { const a=rand(1,9), b=rand(1,9); const res=a*10+b; return makeMC('Zusammenrechnen', `${a} cm + ${b} mm = _____ mm`, 'Erst alles in mm umrechnen!', res, `${a} cm = ${a*10} mm; ${a*10} + ${b} = ${res} mm`); },
+    () => { const a=rand(1,5), b=rand(1,5); const res=a*10+b; return makeMC('Zusammenrechnen', `${a} dm + ${b} cm = _____ cm`, '1 dm = 10 cm', res, `${a} dm = ${a*10} cm; ${a*10} + ${b} = ${res} cm`); },
+    () => { const a=rand(1,5), b=rand(1,9)*10; const res=a*100+b; return makeMC('Zusammenrechnen', `${a} m + ${b} cm = _____ cm`, '1 m = 100 cm', res, `${a} m = ${a*100} cm; ${a*100} + ${b} = ${res} cm`); },
+    () => { const a=rand(1,4), b=rand(1,9)*100; const res=a*1000+b; return makeMC('Zusammenrechnen', `${a} km + ${b} m = _____ m`, '1 km = 1.000 m', res, `${a} km = ${a*1000} m; ${a*1000} + ${b} = ${res} m`); },
+    () => { const a=rand(1,5)*100, b=rand(1,5)*100; const res=(a+b)/10; return makeMC('Zusammenrechnen', `${a} mm + ${b} mm = _____ cm`, '10 mm = 1 cm', res, `${a+b} mm ÷ 10 = ${fmtNum(res)} cm`); },
+    () => { const a=rand(1,5), b=rand(1,5); const res=(a+b)*10; return makeMC('Zusammenrechnen', `${a} m + ${b} m = _____ dm`, '1 m = 10 dm', res, `${a+b} m × 10 = ${res} dm`); },
+    () => { const a=rand(1,5), b=rand(1,9)*10; const res=a*10+b/10; return makeMC('Zusammenrechnen', `${a} dm + ${b} mm = _____ cm`, '1 dm = 10 cm; 1 mm = 0,1 cm', res, `${a} dm = ${a*10} cm; ${b} mm = ${b/10} cm; ${a*10} + ${b/10} = ${fmtNum(res)} cm`); },
+    () => { const a=rand(1,3)*1000, b=rand(1,9)*100; const res=a+b; return makeMC('Zusammenrechnen', `${fmtNum(a)} m + ${fmtNum(b)} m = _____ km`, '1.000 m = 1 km', (a+b)/1000, `${fmtNum(a+b)} m ÷ 1000 = ${fmtNum((a+b)/1000)} km`); },
+    () => { const a=rand(2,9), b=rand(1,5); const res=a*10+b*10; return makeMC('Zusammenrechnen', `${a} dm + ${b} dm = _____ cm`, '1 dm = 10 cm', res, `(${a}+${b}) dm = ${a+b} dm = ${res} cm`); },
+    () => { const a=rand(1,5), b=rand(1,9); const res=a*100+b*10; return makeMC('Zusammenrechnen', `${a} m + ${b} dm = _____ dm`, '1 m = 10 dm', res/10, `${a} m = ${a*10} dm; ${a*10} + ${b} = ${a*10+b} dm`); },
+  ];
+  return pick(templates)();
+}
+
+// ────────────────────────────────────────────────────
+// FORTGESCHRITTEN – ZUSAMMENRECHNEN
+// ────────────────────────────────────────────────────
+function genZusammenFort() {
+  const templates = [
+    () => { const a=rand(1,9), b=rand(1,9)*100, c=rand(10,90); const res=a*100+b/10+c; return makeMC('Zusammenrechnen (Fortg.)', `${a} m + ${b} mm + ${c} cm = _____ cm`, 'Alle Einheiten → cm', res, `${a}m=${a*100}cm; ${b}mm=${b/10}cm; +${c}cm = ${fmtNum(res)} cm`); },
+    () => { const a=rand(1,5), b=rand(1,9)*100, c=rand(1,9); const res=a*1000+b+c/10; return makeMC('Zusammenrechnen (Fortg.)', `${a} km + ${b} m + ${c} dm = _____ m`, 'Alle Einheiten → m', res, `${a}km=${a*1000}m; +${b}m; ${c}dm=${c/10}m = ${fmtNum(res)} m`); },
+    () => { const a=rand(1,3)*1000, b=rand(1,9)*100, c=rand(10,90); const res=a/1000+b/100+c/10; return makeMC('Zusammenrechnen (Fortg.)', `${fmtNum(a)} mm + ${b} cm + ${c} dm = _____ m`, 'Alle Einheiten → m', res, `${fmtNum(a)}mm=${a/1000}m; ${b}cm=${b/100}m; ${c}dm=${c/10}m = ${fmtNum(res)} m`); },
+    () => { const a=rand(1,5), b=rand(100,999); const res=a*1000+b; return makeMC('Zusammenrechnen (Fortg.)', `${a} km + ${b} m = _____ m`, '1 km = 1.000 m', res, `${a}×1000+${b} = ${fmtNum(res)} m`); },
+    () => { const a=rand(1,5)*100, b=rand(1,5)*250; const res=(a*10+b)/100; return makeMC('Zusammenrechnen (Fortg.)', `${fmtNum(a)} cm + ${fmtNum(b)} mm = _____ dm`, 'cm → dm (/10); mm → dm (/100)', res, `${a}cm=${a/10}dm; ${b}mm=${b/100}dm = ${fmtNum(res)} dm`); },
+    () => { const a=rand(1,5), b=rand(1,9)*100, c=rand(10,99); const res=a*10000+b*10+c/10; return makeMC('Zusammenrechnen (Fortg.)', `${a} km + ${b} m + ${c} cm = _____ dm`, 'Alle Einheiten → dm', res, `${a}km=${a*10000}dm; ${b}m=${b*10}dm; ${c}cm=${c/10}dm = ${fmtNum(res)} dm`); },
+    () => { const a=rand(1,3), b=rand(1,9)*500, c=rand(1,9)*100; const res=a*1000000+b*10+c; return makeMC('Zusammenrechnen (Fortg.)', `${a} km + ${b} dm + ${c} cm = _____ cm`, 'Alle Einheiten → cm', res, `${a}km=${a*100000}cm; ${b}dm=${b*10}cm; +${c}cm = ${fmtNum(res)} cm`); },
+  ];
+  return pick(templates)();
+}
+
+// ────────────────────────────────────────────────────
+// ANFÄNGER – VERGLEICH
+// ────────────────────────────────────────────────────
+function genVergleichAnf() {
+  // Pool of value pairs (some equal, some not)
+  const pool = [
+    { a:5, ua:'cm', b:50, ub:'mm' },
+    { a:1, ua:'m',  b:10, ub:'dm' },
+    { a:1, ua:'km', b:1000, ub:'m' },
+    { a:3, ua:'dm', b:30,  ub:'cm' },
+    { a:2, ua:'m',  b:200, ub:'cm' },
+    { a:10, ua:'cm', b:1,  ub:'dm' },
+    { a:100, ua:'cm', b:1, ub:'m' },
+    { a:rand(1,9), ua:'m', b:rand(1,9)*100, ub:'cm' },
+    { a:rand(1,9), ua:'dm', b:rand(1,9)*10, ub:'cm' },
+    { a:rand(1,5), ua:'km', b:rand(1,5)*1000, ub:'m' },
+    { a:rand(10,90), ua:'mm', b:rand(1,9), ub:'cm' },
+    { a:rand(5,25)*10, ua:'cm', b:rand(5,25), ub:'dm' },
+    { a:rand(2,8)*10,  ua:'dm', b:rand(2,8), ub:'m' },
+    { a:rand(1,9),  ua:'m',  b:rand(1,9)*10+rand(1,4), ub:'dm' },
+    { a:rand(10,50), ua:'cm', b:rand(100,500)+rand(1,9), ub:'mm' },
+    { a:rand(1,9), ua:'dm', b:rand(1,9)*10+rand(1,5), ub:'mm' },
+    { a:5, ua:'m',  b:45, ub:'dm' },
+    { a:3, ua:'km', b:3001, ub:'m' },
+    { a:15, ua:'cm', b:150, ub:'mm' },
+    { a:rand(1,5), ua:'km', b:rand(1,5)*1000-rand(1,99), ub:'m' },
+  ];
+  const p = pick(pool);
+  const aInMM = p.a * FACTORS[p.ua];
+  const bInMM = p.b * FACTORS[p.ub];
+  const bInUA = convert(p.b, p.ub, p.ua);
+  let sym, expla;
+  if (aInMM > bInMM) { sym = '>'; expla = `${fmtNum(p.a)} ${p.ua} = ${fmtNum(bInUA > p.a ? bInUA : p.a * FACTORS[p.ua]/FACTORS[p.ub])} ${p.ub} > ${fmtNum(p.b)} ${p.ub}`; }
+  else if (aInMM < bInMM) { sym = '<'; expla = `${fmtNum(p.a)} ${p.ua} in ${p.ub} = ${fmtNum(p.a * FACTORS[p.ua]/FACTORS[p.ub])} ${p.ub} < ${fmtNum(p.b)} ${p.ub}`; }
+  else { sym = '='; expla = `Beide haben denselben Wert: ${fmtNum(aInMM)} mm`; }
+  return {
+    typeLabel: 'Vergleichen',
+    text: `Setze das richtige Zeichen ein:\n${fmtNum(p.a)} ${p.ua}  _____  ${fmtNum(p.b)} ${p.ub}`,
+    hint: 'Rechne beide Angaben in dieselbe Einheit um!',
+    correct: sym,
+    options: shuffle(['<','=','>']),
+    expla
+  };
+}
+
+// ────────────────────────────────────────────────────
+// FORTGESCHRITTEN – VERGLEICH
+// ────────────────────────────────────────────────────
+function genVergleichFort() {
+  const units = ['mm','cm','dm','m','km'];
+  const valPools = { mm:[500,1000,2500,5000,10000,25000], cm:[50,100,250,500,1000,2500], dm:[5,10,25,50,100,250], m:[1,2,5,10,25,50,100], km:[1,2,5,10,25,50] };
+
+  const u1 = pick(units), u2 = pick(units);
+  const v1 = pick(valPools[u1]), v2 = pick(valPools[u2]);
+  const a = v1 * FACTORS[u1], b = v2 * FACTORS[u2];
+  let sym, expla;
+  if (a > b) { sym = '>'; expla = `${fmtNum(v1)} ${u1} = ${fmtNum(a)} mm > ${fmtNum(b)} mm = ${fmtNum(v2)} ${u2}`; }
+  else if (a < b) { sym = '<'; expla = `${fmtNum(v1)} ${u1} = ${fmtNum(a)} mm < ${fmtNum(b)} mm = ${fmtNum(v2)} ${u2}`; }
+  else { sym = '='; expla = `Beide Seiten = ${fmtNum(a)} mm`; }
+  return {
+    typeLabel: 'Vergleichen (Fortg.)',
+    text: `Setze das richtige Zeichen ein:\n${fmtNum(v1)} ${u1}  _____  ${fmtNum(v2)} ${u2}`,
+    hint: 'Wandle alles in mm um – dann ist der Vergleich einfach!',
+    correct: sym,
+    options: shuffle(['<','=','>']),
+    expla
+  };
+}
+
+// ─── DISPATCH ───
+function getQuestion() {
+  if (level === 'anfaenger') {
+    if (category === 'umrechnen') return genUmrechnenAnf();
+    if (category === 'zusammen') return genZusammenAnf();
+    if (category === 'vergleich') return genVergleichAnf();
+  } else {
+    if (category === 'umrechnen') return genUmrechnenFort();
+    if (category === 'zusammen') return genZusammenFort();
+    if (category === 'vergleich') return genVergleichFort();
+  }
+}
+
+// ─── RENDER ───
+function renderQuestion() {
+  answered = false;
+  currentQ = getQuestion();
+  stats.total++;
+  document.getElementById('qNum').textContent = stats.total;
+
+  const isFort = level === 'fortgeschritten';
+  const tagClass = isFort ? 'fort' : '';
+
+  const optBtns = currentQ.options.map((o, i) => `
+    <button class="option-btn" id="opt-${i}" onclick="checkMC(this,'${esc(o)}','${esc(currentQ.correct)}')">
+      <span class="option-letter">${LETTERS[i]}</span>
+      <span>${o}</span>
+    </button>
+  `).join('');
+
+  const hintHTML = currentQ.hint ? `<div class="question-hint">💡 ${currentQ.hint}</div>` : '';
+
+  document.getElementById('questionArea').innerHTML = `
+    <div class="question-card pop" id="qCard">
+      <span class="question-type-tag ${tagClass}">${currentQ.typeLabel}</span>
+      <div class="question-text">${currentQ.text}</div>
+      ${hintHTML}
+      <div class="options-grid">${optBtns}</div>
+      <div id="feedback"></div>
+      <div id="nextWrap"></div>
+    </div>
+  `;
+}
+
+function esc(s) { return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function checkMC(btn, chosen, correct) {
+  if (answered) return;
+  answered = true;
+  const card = document.getElementById('qCard');
+
+  document.querySelectorAll('.option-btn').forEach(b => {
+    b.disabled = true;
+    const txt = b.querySelector('span:last-child');
+    if (txt && txt.textContent.trim() === correct && b !== btn) b.classList.add('reveal-correct');
+  });
+
+  const ok = chosen === correct;
+  if (ok) {
+    btn.classList.add('selected-correct');
+    card.classList.add('correct');
+    stats.correct++;
+    stats.points += isFort() ? 2 : 1;
+    showFeedback(true, `Super gemacht! 🎉 ${currentQ.expla}`);
+  } else {
+    btn.classList.add('selected-wrong');
+    card.classList.add('wrong');
+    stats.wrong++;
+    showFeedback(false, `Leider falsch. Richtige Antwort: <strong>${correct}</strong>. ${currentQ.expla}`);
+  }
+  updateStats();
+  document.getElementById('nextWrap').innerHTML = `<button class="next-btn" onclick="renderQuestion()">Nächste Aufgabe ▶</button>`;
+}
+
+function isFort() { return level === 'fortgeschritten'; }
+
+function showFeedback(ok, msg) {
+  document.getElementById('feedback').innerHTML = `
+    <div class="feedback-box ${ok ? 'correct' : 'wrong'}">
+      <span class="feedback-icon">${ok ? '✅' : '❌'}</span>
+      <span>${msg}</span>
+    </div>`;
+}
+
+function updateStats() {
+  document.getElementById('correct').textContent = stats.correct;
+  document.getElementById('wrong').textContent = stats.wrong;
+  document.getElementById('points').textContent = stats.points;
+  const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+  document.getElementById('progressPct').textContent = stats.total > 0 ? pct + '%' : '–';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ─── CONTROLS ───
+function setLevel(l) {
+  level = l;
+  document.getElementById('btnAnf').className = 'level-btn' + (l==='anfaenger' ? ' active-anf' : '');
+  document.getElementById('btnFort').className = 'level-btn' + (l==='fortgeschritten' ? ' active-fort' : '');
+  document.getElementById('levelLabel').textContent = l === 'anfaenger'
+    ? 'Anfänger: Einfache Umrechnungen und Grundaufgaben'
+    : 'Fortgeschritten: Komplexe Umrechnungen und mehrstufige Aufgaben';
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.remove('cat-fort');
+    if (l==='fortgeschritten' && b.classList.contains('active')) b.classList.add('cat-fort');
+  });
+  resetStats();
+}
+
+function setCategory(c) {
+  category = c;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active','cat-fort'));
+  const active = document.getElementById('tab-' + c);
+  active.classList.add('active');
+  if (level === 'fortgeschritten') active.classList.add('cat-fort');
+  resetStats();
+}
+
+function resetStats() {
+  stats = { correct: 0, wrong: 0, points: 0, total: 0 };
+  updateStats();
+  renderQuestion();
+}
+
+// ─── INIT ───
+renderQuestion();
+</script>
+</body>
+</html>
