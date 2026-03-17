@@ -1,30 +1,352 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Educational App</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meine Lern-Apps – 5b</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #EEF9FF;
+    --surface: #FFFFFF;
+    --text:    #1A3A4A;
+    --muted:   #7AAABB;
+    --shadow:  rgba(30,100,140,.12);
+
+    /* Fachfarben */
+    --deutsch-light: #FFCDD2;
+    --deutsch-mid:   #E57373;
+    --deutsch-dark:  #B71C1C;
+
+    --englisch-light: #FFF9C4;
+    --englisch-mid:   #F9E04B;
+    --englisch-dark:  #F57F17;
+
+    --mathe-light: #BBDEFB;
+    --mathe-mid:   #64B5F6;
+    --mathe-dark:  #1565C0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: -2;
+    background: linear-gradient(180deg, #C8EEFF 0%, #A0DEFF 40%, #7DCEF5 100%);
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0; z-index: -1;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(255,255,255,.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(255,255,255,.12) 0%, transparent 50%);
+  }
+
+  /* ── BUBBLES ── */
+  .bubbles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .bubble {
+    position: absolute; bottom: -60px; border-radius: 50%;
+    background: rgba(255,255,255,.25); border: 1.5px solid rgba(255,255,255,.4);
+    animation: riseUp linear infinite;
+  }
+  .bubble:nth-child(1){width:14px;height:14px;left:8%;animation-duration:9s;animation-delay:0s;}
+  .bubble:nth-child(2){width:9px;height:9px;left:18%;animation-duration:12s;animation-delay:2s;}
+  .bubble:nth-child(3){width:18px;height:18px;left:30%;animation-duration:10s;animation-delay:4s;}
+  .bubble:nth-child(4){width:10px;height:10px;left:45%;animation-duration:14s;animation-delay:1s;}
+  .bubble:nth-child(5){width:7px;height:7px;left:60%;animation-duration:11s;animation-delay:3s;}
+  .bubble:nth-child(6){width:16px;height:16px;left:72%;animation-duration:8s;animation-delay:5s;}
+  .bubble:nth-child(7){width:11px;height:11px;left:85%;animation-duration:13s;animation-delay:0.5s;}
+  .bubble:nth-child(8){width:8px;height:8px;left:92%;animation-duration:10s;animation-delay:6s;}
+  @keyframes riseUp{0%{transform:translateY(0) scale(1);opacity:.7;}100%{transform:translateY(-110vh) scale(1.2);opacity:0;}}
+
+  /* ── FISH ── */
+  .fish-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .fish { position: absolute; font-size: 1.8rem; opacity: .75; }
+  .fish:nth-child(1){top:15%;font-size:2rem;animation:swimRight 22s linear infinite;animation-delay:0s;}
+  .fish:nth-child(2){top:35%;font-size:1.4rem;animation:swimLeft 28s linear infinite;animation-delay:5s;}
+  .fish:nth-child(3){top:55%;font-size:2.4rem;animation:swimRight 18s linear infinite;animation-delay:2s;}
+  .fish:nth-child(4){top:70%;font-size:1.2rem;animation:swimLeft 32s linear infinite;animation-delay:8s;}
+  .fish:nth-child(5){top:25%;font-size:1.6rem;animation:swimRight 25s linear infinite;animation-delay:12s;}
+  .fish:nth-child(6){top:80%;font-size:2rem;animation:swimLeft 20s linear infinite;animation-delay:3s;}
+  @keyframes swimRight{0%{left:-80px;}100%{left:110%;}}
+  @keyframes swimLeft{0%{right:-80px;left:auto;}100%{right:110%;left:auto;}}
+
+  /* ── HEADER ── */
+  header { text-align:center; padding:52px 20px 28px; position:relative; z-index:1; }
+  .badge {
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(255,255,255,.7); color:#1A5A7A;
+    border-radius:40px; padding:5px 18px;
+    font-size:.78rem; font-weight:700; letter-spacing:.6px; text-transform:uppercase;
+    margin-bottom:16px; box-shadow:0 4px 12px rgba(30,100,140,.15);
+    backdrop-filter:blur(6px);
+    animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  h1 {
+    font-family:'Baloo 2',cursive; font-size:clamp(2.2rem,7vw,3.8rem);
+    font-weight:800; line-height:1.05; color:#fff;
+    text-shadow:0 2px 20px rgba(0,80,140,.3);
+    animation:popIn .5s .1s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .subtitle {
+    margin-top:10px; font-size:1rem; color:rgba(255,255,255,.85); font-weight:600;
+    animation:popIn .5s .2s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  /* ── PERKS ── */
+  .perks {
+    display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
+    max-width:700px; margin:0 auto 30px; padding:0 20px;
+    position:relative; z-index:1;
+    animation:popIn .5s .3s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .perk {
+    display:flex; align-items:center; gap:7px;
+    background:rgba(255,255,255,.65); border-radius:40px; padding:7px 18px;
+    font-size:.8rem; font-weight:700; color:#1A5A7A;
+    box-shadow:0 3px 10px rgba(30,100,140,.12); backdrop-filter:blur(6px);
+  }
+
+  /* ── TABS ── */
+  .tabs-outer { max-width:960px; margin:0 auto; padding:0 20px; position:relative; z-index:1; }
+  .subject-tabs {
+    display:flex; flex-wrap:wrap; gap:6px;
+    animation:popIn .5s .35s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .subject-btn {
+    font-family:'Baloo 2',cursive; font-size:1.05rem; font-weight:700;
+    padding:12px 28px; border-radius:16px 16px 0 0;
+    border:2.5px solid transparent; border-bottom:none;
+    background:rgba(255,255,255,.45); color:rgba(255,255,255,.9);
+    cursor:pointer; transition:all .2s; position:relative; bottom:-2px;
+    backdrop-filter:blur(6px);
+  }
+  .subject-btn:hover { background:rgba(255,255,255,.65); color:#1A3A4A; }
+  .subject-btn.active {
+    color:var(--text); border-color:rgba(0,0,0,.08);
+    border-bottom-color:var(--surface);
+    box-shadow:0 -4px 14px rgba(30,100,140,.15); z-index:2;
+  }
+
+  /* Fachfarben für aktive Tabs */
+  .subject-btn[data-subject="deutsch"].active {
+    background: var(--deutsch-light);
+    border-top-color: var(--deutsch-mid);
+    color: var(--deutsch-dark);
+  }
+  .subject-btn[data-subject="mathe"].active {
+    background: var(--mathe-light);
+    border-top-color: var(--mathe-mid);
+    color: var(--mathe-dark);
+  }
+  .subject-btn[data-subject="englisch"].active {
+    background: var(--englisch-light);
+    border-top-color: var(--englisch-mid);
+    color: var(--englisch-dark);
+  }
+
+  /* ── PANEL ── */
+  .panel-outer { max-width:960px; margin:0 auto; padding:0 20px 60px; position:relative; z-index:1; }
+  .subject-panel-wrap {
+    border-radius:0 22px 22px 22px;
+    border:2.5px solid rgba(0,0,0,.08);
+    padding:32px 28px 36px;
+    box-shadow:0 8px 32px rgba(30,100,140,.18);
+    position:relative; z-index:1; min-height:220px;
+    animation:popIn .5s .4s cubic-bezier(.34,1.56,.64,1) both;
+    transition: background .3s;
+  }
+
+  /* Panel-Hintergrund je Tab */
+  .subject-panel-wrap.panel-deutsch  { background: #FFF5F5; }
+  .subject-panel-wrap.panel-mathe    { background: #F0F8FF; }
+  .subject-panel-wrap.panel-englisch { background: #FFFEF0; }
+
+  .subject-content { display:none; }
+  .subject-content.active { display:block; animation:fadeUp .3s ease both; }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ── CARDS GRID ── */
+  .cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:18px; }
+
+  /* ── APP CARD ── */
+  .app-card {
+    border-radius:20px; padding:22px 20px 18px;
+    text-decoration:none; color:var(--text);
+    border:2px solid rgba(0,0,0,.06); box-shadow:0 4px 16px var(--shadow);
+    transition:transform .2s,box-shadow .2s,border-color .2s;
+    position:relative; overflow:hidden; display:flex; flex-direction:column;
+  }
+  .app-card:hover { transform:translateY(-6px) scale(1.01); box-shadow:0 14px 40px var(--shadow); }
+  .app-card::before {
+    content:''; position:absolute; top:0; left:0; right:0;
+    height:5px; border-radius:20px 20px 0 0;
+  }
+
+  /* Deutsch – Pastellrot */
+  .card-de { background:#FFF0F0; }
+  .card-de::before { background:linear-gradient(90deg, var(--deutsch-mid), var(--deutsch-dark)); }
+  .card-de:hover { border-color: var(--deutsch-mid); }
+  .card-de .card-tag { background:rgba(229,115,115,.15); color:var(--deutsch-dark); }
+  .card-de .card-title { color:var(--deutsch-dark); }
+  .card-de .card-btn { background:linear-gradient(135deg, var(--deutsch-mid), var(--deutsch-dark)); box-shadow:0 4px 14px rgba(229,115,115,.35); }
+
+  /* Mathe – Pastellblau */
+  .card-ma { background:#EFF7FF; }
+  .card-ma::before { background:linear-gradient(90deg, var(--mathe-mid), var(--mathe-dark)); }
+  .card-ma:hover { border-color: var(--mathe-mid); }
+  .card-ma .card-tag { background:rgba(100,181,246,.15); color:var(--mathe-dark); }
+  .card-ma .card-title { color:var(--mathe-dark); }
+  .card-ma .card-btn { background:linear-gradient(135deg, var(--mathe-mid), var(--mathe-dark)); box-shadow:0 4px 14px rgba(100,181,246,.35); }
+
+  /* Englisch – Pastellgelb */
+  .card-en { background:#FFFDE7; }
+  .card-en::before { background:linear-gradient(90deg, var(--englisch-mid), var(--englisch-dark)); }
+  .card-en:hover { border-color: var(--englisch-mid); }
+  .card-en .card-tag { background:rgba(249,224,75,.3); color:var(--englisch-dark); }
+  .card-en .card-title { color:var(--englisch-dark); }
+  .card-en .card-btn { background:linear-gradient(135deg, var(--englisch-mid), var(--englisch-dark)); box-shadow:0 4px 14px rgba(249,224,75,.4); }
+
+  .card-icon { font-size:2.4rem; margin-bottom:10px; display:block; transition:transform .3s; line-height:1; }
+  .app-card:hover .card-icon { transform:scale(1.2) rotate(-6deg); }
+  .card-tag {
+    display:inline-block; font-size:.68rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:.7px;
+    border-radius:20px; padding:3px 10px; margin-bottom:8px;
+  }
+  .card-title { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; margin-bottom:7px; line-height:1.15; }
+  .card-desc { font-size:.82rem; font-weight:600; color:var(--muted); line-height:1.5; flex:1; margin-bottom:16px; }
+  .card-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 20px; border-radius:50px;
+    font-family:'Baloo 2',cursive; font-size:.9rem; font-weight:700;
+    color:#fff; border:none; cursor:pointer;
+    transition:filter .2s,transform .15s; align-self:flex-start; text-decoration:none;
+  }
+  .card-btn:hover { filter:brightness(1.08); transform:scale(1.05); }
+  .arrow { display:inline-block; transition:transform .2s; }
+  .app-card:hover .arrow { transform:translateX(5px); }
+
+  /* ── PLATZHALTER ── */
+  .placeholder { text-align:center; padding:48px 20px; color:var(--muted); font-weight:600; font-size:.95rem; }
+  .placeholder .big { font-size:3rem; display:block; margin-bottom:12px; }
+  .placeholder p { max-width:320px; margin:0 auto; line-height:1.6; }
+
+  /* ── FOOTER ── */
+  footer { text-align:center; padding:10px 20px 50px; font-size:.78rem; font-weight:700; color:rgba(255,255,255,.7); position:relative; z-index:1; }
+
+  @keyframes popIn{from{opacity:0;transform:scale(.85) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+  .subject-content.active .app-card{animation:popIn .35s cubic-bezier(.34,1.56,.64,1) both;}
+  .subject-content.active .app-card:nth-child(1){animation-delay:.04s;}
+  .subject-content.active .app-card:nth-child(2){animation-delay:.10s;}
+  .subject-content.active .app-card:nth-child(3){animation-delay:.16s;}
+
+  @media(max-width:540px){
+    .cards-grid{grid-template-columns:1fr;}
+    h1{font-size:2.2rem;}
+    .subject-panel-wrap{border-radius:0 0 22px 22px;}
+    .subject-btn{padding:10px 18px;font-size:.95rem;}
+  }
+</style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="#deutsch">Deutsch</a></li>
-            <li><a href="#mathe">Mathe</a></li>
-            <li><a href="#englisch">Englisch</a></li>
-        </ul>
-    </nav>
-    <div id="deutsch">
-        <h2>Deutsch</h2>
-        <a href="deutsch-app-link">Start Deutsch App</a>
+
+<div class="bubbles" aria-hidden="true">
+  <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+  <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+  <div class="bubble"></div><div class="bubble"></div>
+</div>
+
+<div class="fish-layer" aria-hidden="true">
+  <span class="fish">🐠</span>
+  <span class="fish">🐟</span>
+  <span class="fish">🐡</span>
+  <span class="fish">🦈</span>
+  <span class="fish">🐙</span>
+  <span class="fish">🐠</span>
+</div>
+
+<header>
+  <div class="badge">🐠 Klasse 5b</div>
+  <h1>Meine Lern-Apps</h1>
+  <p class="subtitle">Wähle ein Fach und übe – jedes Mal neue Aufgaben! 🚀</p>
+</header>
+
+<div class="perks">
+  <div class="perk">🎲 Jedes Mal neue Aufgaben</div>
+  <div class="perk">⭐ Punkte sammeln</div>
+</div>
+
+<!-- REITER -->
+<div class="tabs-outer">
+  <div class="subject-tabs">
+    <button class="subject-btn active" data-subject="deutsch">🇩🇪 Deutsch</button>
+    <button class="subject-btn"        data-subject="mathe">🔢 Mathe</button>
+    <button class="subject-btn"        data-subject="englisch">🇬🇧 Englisch</button>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div class="panel-outer">
+  <div class="subject-panel-wrap panel-deutsch" id="panel-wrap">
+
+    <!-- 🇩🇪 DEUTSCH -->
+    <div class="subject-content active" id="subject-deutsch">
+      <div class="cards-grid">
+        <!-- ➕ DEUTSCH-APPS WERDEN HIER EINGEFÜGT -->
+      </div>
+      <div class="placeholder">
+        <span class="big">📕</span>
+        <p>Hier kommen bald Deutsch-Apps zum Üben!</p>
+      </div>
     </div>
-    <div id="mathe">
-        <h2>Mathe</h2>
-        <a href="mathe-app-link">Start Mathe App</a>
+
+    <!-- 🔢 MATHE -->
+    <div class="subject-content" id="subject-mathe">
+      <div class="cards-grid">
+        <!-- ➕ MATHE-APPS WERDEN HIER EINGEFÜGT -->
+      </div>
+      <div class="placeholder">
+        <span class="big">📘</span>
+        <p>Hier kommen bald Mathe-Apps zum Üben!</p>
+      </div>
     </div>
-    <div id="englisch">
-        <h2>Englisch</h2>
-        <a href="englisch-app-link">Start Englisch App</a>
+
+    <!-- 🇬🇧 ENGLISCH -->
+    <div class="subject-content" id="subject-englisch">
+      <div class="cards-grid">
+        <!-- ➕ ENGLISCH-APPS WERDEN HIER EINGEFÜGT -->
+      </div>
+      <div class="placeholder">
+        <span class="big">📒</span>
+        <p>Hier kommen bald Englisch-Apps zum Üben!</p>
+      </div>
     </div>
+
+  </div>
+</div>
+
+<footer>Klasse <strong>5b</strong> 🐙</footer>
+
+<script>
+  const panelColors = {
+    deutsch:  'panel-deutsch',
+    mathe:    'panel-mathe',
+    englisch: 'panel-englisch'
+  };
+  const panelWrap = document.getElementById('panel-wrap');
+
+  document.querySelectorAll('.subject-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.subject-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('subject-' + btn.dataset.subject).classList.add('active');
+      // Panel-Farbe wechseln
+      panelWrap.className = 'subject-panel-wrap ' + panelColors[btn.dataset.subject];
+    });
+  });
+</script>
 </body>
 </html>
