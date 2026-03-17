@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geld – 5. Klasse</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0fdf4;
+    --primary: #16a34a;
+    --primary-light: #dcfce7;
+    --secondary: #ca8a04;
+    --secondary-light: #fef9c3;
+    --secondary-dark: #713f12;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --error: #dc2626;
+    --error-light: #fee2e2;
+    --warning: #d97706;
+    --text: #1a2e05;
+    --text-muted: #4b7a30;
+    --border: #bbf7d0;
+    --shadow: 0 4px 24px rgba(22,163,74,0.10);
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 15% 25%, #bbf7d055 0%, transparent 45%),
+      radial-gradient(circle at 85% 75%, #fef9c355 0%, transparent 45%);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #15803d 0%, #ca8a04 100%);
+    color: white; padding: 26px 20px 22px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(21,128,61,0.3);
+    position: relative; overflow: hidden;
+  }
+  .header::before { content:'💰'; position:absolute; top:-10px; right:20px; font-size:6rem; opacity:0.08; }
+  .header::after  { content:'🪙'; position:absolute; bottom:-15px; left:10px; font-size:5rem; opacity:0.08; }
+  .header h1 { font-family:'Baloo 2',cursive; font-size:clamp(1.7rem,5vw,2.4rem); font-weight:800; text-shadow:0 2px 8px rgba(0,0,0,0.2); }
+  .header p  { font-size:0.93rem; opacity:0.88; margin-top:4px; }
+  .coin-bar  { display:flex; justify-content:center; gap:6px; margin-top:12px; flex-wrap:wrap; }
+  .coin-chip { background:rgba(255,255,255,0.18); border:2px solid rgba(255,255,255,0.38); border-radius:30px; padding:3px 12px; font-weight:800; font-size:0.88rem; }
+
+  .container { max-width:820px; margin:0 auto; padding:24px 16px 60px; }
+
+  /* LEVEL INDICATOR */
+  .level-indicator {
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    margin-bottom:18px;
+  }
+  .level-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:white; border-radius:50px; padding:8px 20px;
+    box-shadow:var(--shadow); font-weight:800; font-size:0.95rem;
+    color:var(--primary); border:2px solid var(--primary-light);
+    transition:all 0.4s;
+  }
+  .level-badge.hard { color:var(--secondary-dark); border-color:var(--secondary-light); }
+  .level-badge.expert { color:#7c3aed; border-color:#ede9fe; }
+  .level-stars { font-size:1rem; letter-spacing:1px; }
+
+  /* STREAK BAR */
+  .streak-wrap { margin-bottom:18px; }
+  .streak-label { display:flex; justify-content:space-between; font-size:0.82rem; font-weight:700; color:var(--text-muted); margin-bottom:5px; }
+  .streak-track { height:10px; background:var(--border); border-radius:100px; overflow:hidden; position:relative; }
+  .streak-fill  { height:100%; border-radius:100px; transition:width 0.5s ease, background 0.5s; }
+  .streak-fill.easy   { background:linear-gradient(90deg,#4ade80,#16a34a); }
+  .streak-fill.medium { background:linear-gradient(90deg,#fbbf24,#ca8a04); }
+  .streak-fill.hard   { background:linear-gradient(90deg,#f97316,#dc2626); }
+  .streak-fill.expert { background:linear-gradient(90deg,#a78bfa,#7c3aed); }
+
+  /* CATEGORY TABS */
+  .category-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; justify-content:center; }
+  .cat-btn {
+    border:2px solid var(--border); border-radius:50px; padding:7px 18px;
+    font-family:'Nunito',sans-serif; font-size:0.9rem; font-weight:700;
+    cursor:pointer; transition:all 0.2s; background:white; color:var(--text-muted);
+  }
+  .cat-btn.active { background:var(--primary-light); border-color:var(--primary); color:var(--primary); }
+
+  /* SCORE */
+  .score-bar {
+    display:flex; justify-content:space-between; align-items:center;
+    background:white; border-radius:14px; padding:11px 18px;
+    margin-bottom:18px; box-shadow:var(--shadow); flex-wrap:wrap; gap:8px;
+  }
+  .score-item { display:flex; align-items:center; gap:7px; font-weight:700; font-size:0.93rem; }
+  .score-icon { font-size:1.2rem; }
+  .score-val { color:var(--primary); font-size:1.1rem; }
+  .score-val.green { color:var(--success); }
+  .score-val.red   { color:var(--error); }
+
+  /* QUESTION CARD */
+  .question-card {
+    background:white; border-radius:var(--radius);
+    padding:28px 26px 24px; box-shadow:var(--shadow);
+    margin-bottom:18px; border:2px solid transparent;
+    transition:border 0.3s; position:relative; overflow:hidden;
+  }
+  .question-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:5px;
+    background:linear-gradient(90deg,#16a34a,#ca8a04);
+    border-radius:var(--radius) var(--radius) 0 0;
+  }
+  .question-card.correct { border-color:var(--success); }
+  .question-card.wrong   { border-color:var(--error); }
+
+  .question-type-tag {
+    display:inline-block; background:var(--primary-light); color:var(--primary);
+    border-radius:20px; padding:3px 12px; font-size:0.76rem; font-weight:800;
+    text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;
+  }
+  .question-type-tag.hard   { background:var(--secondary-light); color:var(--secondary-dark); }
+  .question-type-tag.expert { background:#ede9fe; color:#6d28d9; }
+
+  .question-text {
+    font-size:clamp(1.05rem,3.5vw,1.28rem); font-weight:700;
+    line-height:1.65; margin-bottom:20px; white-space:pre-line;
+  }
+  .question-hint {
+    font-size:0.84rem; color:var(--text-muted); margin-bottom:16px;
+    padding:9px 13px; background:#f0fdf4; border-radius:10px;
+    border-left:3px solid var(--primary);
+  }
+
+  /* OPTIONS */
+  .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px; }
+  @media(max-width:480px){ .options-grid{ grid-template-columns:1fr; } }
+
+  .option-btn {
+    border:2.5px solid var(--border); border-radius:12px; padding:13px 15px;
+    font-family:'Nunito',sans-serif; font-size:1rem; font-weight:700;
+    cursor:pointer; transition:all 0.2s; background:#fafffe; color:var(--text);
+    text-align:left; display:flex; align-items:center; gap:10px;
+  }
+  .option-btn:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-light); color:var(--primary); transform:translateY(-1px); box-shadow:0 4px 12px rgba(22,163,74,0.12); }
+  .option-btn.selected-correct { border-color:var(--success); background:var(--success-light); color:var(--success); }
+  .option-btn.selected-wrong   { border-color:var(--error);   background:var(--error-light);   color:var(--error); }
+  .option-btn.reveal-correct   { border-color:var(--success); background:var(--success-light); color:var(--success); }
+  .option-btn:disabled { cursor:default; }
+  .option-letter {
+    width:28px; height:28px; border-radius:50%; background:var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.82rem; font-weight:900; flex-shrink:0; transition:all 0.2s;
+  }
+  .option-btn.selected-correct .option-letter { background:var(--success); color:white; }
+  .option-btn.selected-wrong   .option-letter { background:var(--error);   color:white; }
+  .option-btn.reveal-correct   .option-letter { background:var(--success); color:white; }
+
+  /* FEEDBACK */
+  .feedback-box {
+    border-radius:12px; padding:12px 15px; font-weight:700; font-size:0.93rem;
+    margin-top:12px; display:flex; align-items:flex-start; gap:10px;
+    animation:fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn{ from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+  .feedback-box.correct { background:var(--success-light); color:#14532d; border-left:4px solid var(--success); }
+  .feedback-box.wrong   { background:var(--error-light);   color:#7f1d1d; border-left:4px solid var(--error); }
+  .feedback-icon { font-size:1.3rem; flex-shrink:0; }
+
+  /* LEVEL-UP TOAST */
+  .levelup-toast {
+    position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px);
+    background:linear-gradient(135deg,#16a34a,#ca8a04);
+    color:white; border-radius:50px; padding:12px 28px;
+    font-weight:800; font-size:1rem; box-shadow:0 8px 30px rgba(0,0,0,0.25);
+    z-index:1000; transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);
+    pointer-events:none; white-space:nowrap;
+  }
+  .levelup-toast.show { transform:translateX(-50%) translateY(0); }
+
+  /* NEXT BTN */
+  .next-btn {
+    display:block; width:100%; border:none; border-radius:12px; padding:14px;
+    font-family:'Nunito',sans-serif; font-size:1.02rem; font-weight:800;
+    cursor:pointer; color:white; margin-top:15px; transition:all 0.2s;
+    background:linear-gradient(135deg,#16a34a,#ca8a04);
+    box-shadow:0 4px 14px rgba(22,163,74,0.25);
+  }
+  .next-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(22,163,74,0.3); }
+
+  /* INFO */
+  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px; }
+  @media(max-width:560px){ .info-grid{ grid-template-columns:1fr; } }
+  .info-card { background:white; border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); overflow-x:auto; }
+  .info-card h3 { font-family:'Baloo 2',cursive; font-size:1rem; color:var(--primary); margin-bottom:10px; }
+  .coin-list { list-style:none; }
+  .coin-list li { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--border); font-size:0.85rem; font-weight:600; }
+  .coin-list li:last-child { border-bottom:none; }
+  .conv-table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+  .conv-table th { background:var(--primary-light); color:var(--primary); padding:6px 10px; text-align:center; font-weight:800; }
+  .conv-table th:first-child { border-radius:8px 0 0 8px; }
+  .conv-table th:last-child  { border-radius:0 8px 8px 0; }
+  .conv-table td { padding:6px 10px; text-align:center; border-bottom:1px solid var(--border); font-weight:600; }
+  .conv-table tr:last-child td { border-bottom:none; }
+  .conv-table tr:nth-child(even) td { background:#f0fdf4; }
+  .conv-table .hl { font-weight:800; color:var(--primary); }
+
+  .merkhilfe {
+    background:linear-gradient(135deg,#fef9c3,#fde68a);
+    border-radius:14px; padding:13px 16px; margin-bottom:20px;
+    border-left:4px solid var(--warning); font-size:0.9rem; font-weight:700; color:#78350f;
+  }
+  .merkhilfe strong { display:block; margin-bottom:3px; }
+
+  .progress-wrap { margin-bottom:20px; }
+  .progress-label { display:flex; justify-content:space-between; font-size:0.82rem; font-weight:700; color:var(--text-muted); margin-bottom:5px; }
+  .progress-track { height:8px; background:var(--border); border-radius:100px; overflow:hidden; }
+  .progress-fill  { height:100%; background:linear-gradient(90deg,#16a34a,#ca8a04); border-radius:100px; transition:width 0.4s ease; }
+
+  @keyframes pop{ 0%{transform:scale(0.88);opacity:0} 60%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+  .pop { animation:pop 0.3s ease forwards; }
+  @media(max-width:600px){ .question-card{ padding:18px 14px 16px; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>💶 Geld – Rechnen mit Euro und Cent</h1>
+  <p>5. Klasse Mittelschule Bayern · Adaptives Übungsprogramm</p>
+  <div class="coin-bar">
+    <span class="coin-chip">1 Ct</span><span class="coin-chip">5 Ct</span>
+    <span class="coin-chip">10 Ct</span><span class="coin-chip">50 Ct</span>
+    <span class="coin-chip">1 €</span><span class="coin-chip">2 €</span>
+    <span class="coin-chip">5 €</span><span class="coin-chip">10 €</span>
+    <span class="coin-chip">50 €</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- LEVEL BADGE -->
+  <div class="level-indicator">
+    <div class="level-badge" id="levelBadge">
+      <span class="level-stars" id="levelStars">⭐</span>
+      <span id="levelName">Einsteiger</span>
+    </div>
+  </div>
+
+  <!-- STREAK BAR -->
+  <div class="streak-wrap">
+    <div class="streak-label">
+      <span>🔥 Richtige Antworten in Folge: <strong id="streakCount">0</strong></span>
+      <span id="streakNext">Noch 5 bis zur nächsten Stufe</span>
+    </div>
+    <div class="streak-track">
+      <div class="streak-fill easy" id="streakFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- INFO CARDS -->
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>🪙 Münzen &amp; Scheine</h3>
+      <ul class="coin-list">
+        <li><span>1 Cent</span><span>0,01 €</span></li>
+        <li><span>2 Cent</span><span>0,02 €</span></li>
+        <li><span>5 Cent</span><span>0,05 €</span></li>
+        <li><span>10 Cent</span><span>0,10 €</span></li>
+        <li><span>20 Cent</span><span>0,20 €</span></li>
+        <li><span>50 Cent</span><span>0,50 €</span></li>
+        <li><span>1 Euro</span><span>100 Ct</span></li>
+        <li><span>2 Euro</span><span>200 Ct</span></li>
+        <li><span>5 Euro</span><span>500 Ct</span></li>
+        <li><span>10 Euro</span><span>1.000 Ct</span></li>
+        <li><span>50 Euro</span><span>5.000 Ct</span></li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>📐 Umrechnungstabelle</h3>
+      <table class="conv-table">
+        <thead><tr><th>Einheit</th><th>Cent</th><th>Euro</th></tr></thead>
+        <tbody>
+          <tr><td class="hl">1 Ct</td><td>1</td><td>0,01</td></tr>
+          <tr><td class="hl">10 Ct</td><td>10</td><td>0,10</td></tr>
+          <tr><td class="hl">50 Ct</td><td>50</td><td>0,50</td></tr>
+          <tr><td class="hl">1 €</td><td>100</td><td>1,00</td></tr>
+          <tr><td class="hl">5 €</td><td>500</td><td>5,00</td></tr>
+          <tr><td class="hl">10 €</td><td>1.000</td><td>10,00</td></tr>
+          <tr><td class="hl">50 €</td><td>5.000</td><td>50,00</td></tr>
+          <tr><td class="hl">100 €</td><td>10.000</td><td>100,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="merkhilfe">
+    <strong>💡 Merkhilfe</strong>
+    € → Ct: × 100 &nbsp;|&nbsp; Ct → €: ÷ 100 &nbsp;|&nbsp; 1 € = 100 Ct
+  </div>
+
+  <!-- CATEGORY TABS -->
+  <div class="category-tabs">
+    <button class="cat-btn active" id="tab-umrechnen" onclick="setCategory('umrechnen')">🔄 Umrechnen</button>
+    <button class="cat-btn" id="tab-zusammen"  onclick="setCategory('zusammen')">➕ Zusammenrechnen</button>
+    <button class="cat-btn" id="tab-vergleich"  onclick="setCategory('vergleich')">⚖️ Größer / Kleiner</button>
+    <button class="cat-btn" id="tab-alltag"     onclick="setCategory('alltag')">🛒 Alltagsaufgaben</button>
+  </div>
+
+  <!-- SCORE BAR -->
+  <div class="score-bar">
+    <div class="score-item"><span class="score-icon">🎯</span><span>Aufgabe</span><span class="score-val" id="qNum">1</span></div>
+    <div class="score-item"><span class="score-icon">✅</span><span>Richtig</span><span class="score-val green" id="correct">0</span></div>
+    <div class="score-item"><span class="score-icon">❌</span><span>Falsch</span><span class="score-val red" id="wrong">0</span></div>
+    <div class="score-item"><span class="score-icon">⭐</span><span>Punkte</span><span class="score-val" id="points">0</span></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Trefferquote</span><span id="progressPct">–</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div id="questionArea"></div>
+</div>
+
+<!-- LEVEL UP TOAST -->
+<div class="levelup-toast" id="toast">🚀 Neue Stufe erreicht!</div>
+
+<script>
+// ─── ADAPTIVE LEVEL SYSTEM ───
+// Stufen: 0=Einsteiger, 1=Geübt, 2=Fortgeschritten, 3=Profi
+// Aufstieg: 5 richtige in Folge → +1 Stufe
+// Abstieg: 3 falsche in Folge → -1 Stufe (nicht unter 0)
+
+let diffLevel   = 0;      // 0,1,2,3
+let streak      = 0;      // aktuelle richtige Folge
+let wrongStreak = 0;      // aktuelle falsche Folge
+const STREAK_UP   = 5;    // richtige in Folge für Aufstieg
+const STREAK_DOWN = 3;    // falsche in Folge für Abstieg
+
+const LEVEL_INFO = [
+  { name:'Einsteiger',       stars:'⭐',      fillClass:'easy',   thresholdLabel:'Noch 5 für ⭐⭐' },
+  { name:'Geübt',            stars:'⭐⭐',    fillClass:'medium', thresholdLabel:'Noch 5 für ⭐⭐⭐' },
+  { name:'Fortgeschritten',  stars:'⭐⭐⭐',  fillClass:'hard',   thresholdLabel:'Noch 5 für ⭐⭐⭐⭐' },
+  { name:'Profi',            stars:'⭐⭐⭐⭐', fillClass:'expert', thresholdLabel:'Höchste Stufe!' },
+];
+
+let category = 'umrechnen';
+let stats = { correct:0, wrong:0, points:0, total:0 };
+let answered = false;
+let currentQ  = null;
+const LETTERS = ['A','B','C','D'];
+
+// ─── HELPERS ───
+function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function fmtEuro(n){
+  let r=Math.round(n*100)/100;
+  return r.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+}
+function fmtCent(n){ return Math.round(n).toLocaleString('de-DE')+' Ct'; }
+function fmtE(n){ return (Math.round(n*100)/100).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+function wrongAnswersEuro(correct, count){
+  const set=new Set();
+  const mults=[0.1,10,100,0.01,2,0.5,5,0.001];
+  const offs=[0.01,0.05,0.10,0.50,1,2,5,10,-0.01,-0.10,-1,-5,0.03,0.07,0.13,0.47];
+  let tries=0;
+  while(set.size<count && tries<400){
+    tries++;
+    let c = Math.random()<0.55 ? correct*pick(mults) : correct+pick(offs);
+    c=Math.round(c*100)/100;
+    const s=fmtEuro(c);
+    if(c>0 && s!==fmtEuro(correct)) set.add(s);
+  }
+  const fb=[fmtEuro(correct*10),fmtEuro(correct/10),fmtEuro(correct+1),fmtEuro(correct*100)];
+  for(const f of fb){ if(set.size>=count)break; if(f!==fmtEuro(correct))set.add(f); }
+  return [...set].slice(0,count);
+}
+function wrongAnswersCent(correct, count){
+  const set=new Set();
+  const mults=[0.1,10,100,0.01,2,0.5,5,1000];
+  const offs=[1,5,10,50,100,-1,-5,-10,-50,200,33,77];
+  let tries=0;
+  while(set.size<count && tries<400){
+    tries++;
+    let c = Math.random()<0.55 ? correct*pick(mults) : correct+pick(offs);
+    c=Math.round(c);
+    const s=fmtCent(c);
+    if(c>0 && s!==fmtCent(correct)) set.add(s);
+  }
+  return [...set].slice(0,count);
+}
+function wrongAnswersVergleich(correct){
+  // for < = > just return all three shuffled
+  return shuffle(['<','=','>']);
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function makeMCeuro(label, text, hint, correctVal, expla){
+  const cs=fmtEuro(correctVal);
+  const ws=wrongAnswersEuro(correctVal,3);
+  return {typeLabel:label,text,hint,correct:cs,options:shuffle([cs,...ws]),expla:expla||''};
+}
+function makeMCcent(label, text, hint, correctVal, expla){
+  const cs=fmtCent(correctVal);
+  const ws=wrongAnswersCent(correctVal,3);
+  return {typeLabel:label,text,hint,correct:cs,options:shuffle([cs,...ws]),expla:expla||''};
+}
+function makeMCsym(label, text, hint, sym, expla){
+  return {typeLabel:label,text,hint,correct:sym,options:shuffle(['<','=','>']),expla:expla||''};
+}
+
+// ────────────────────────────────────────────────────
+// UMRECHNEN
+// ────────────────────────────────────────────────────
+function genUmrechnen(){
+  const lv=diffLevel;
+
+  if(lv===0){
+    // Glatte Beträge, nur volle Euro oder runde Cent
+    const t=[
+      ()=>{ const v=pick([1,2,3,5,10,20,50]); return makeMCcent('Umrechnen',`${v} € = _____ Ct`,'1 € = 100 Ct',v*100,`${v} × 100 = ${v*100} Ct`); },
+      ()=>{ const v=pick([100,200,300,500,1000]); return makeMCeuro('Umrechnen',`${fmtCent(v)} = _____ €`,'100 Ct = 1 €',v/100,`${v} ÷ 100 = ${fmtE(v/100)} €`); },
+      ()=>{ const v=pick([50,100,200,500]); return makeMCeuro('Umrechnen',`${v} Ct = _____ €`,'100 Ct = 1 €',v/100,`${v} ÷ 100 = ${fmtE(v/100)} €`); },
+      ()=>{ const v=pick([0.50,1.00,2.00,5.00,10.00]); return makeMCcent('Umrechnen',`${fmtEuro(v)} = _____ Ct`,'× 100',v*100,`${fmtE(v)} × 100 = ${v*100} Ct`); },
+    ];
+    return pick(t)();
+  }
+
+  if(lv===1){
+    // Gemischte Beträge, noch keine krummen Cents
+    const t=[
+      ()=>{ const e=pick([1,2,3,5,10]); const c=pick([10,20,50]); const tot=e+c/100; return makeMCcent('Umrechnen',`${fmtEuro(tot)} = _____ Ct`,'€ × 100 = Ct',Math.round(tot*100),`${fmtE(tot)} × 100 = ${Math.round(tot*100)} Ct`); },
+      ()=>{ const v=rand(150,999); const vr=Math.round(v/50)*50; return makeMCeuro('Umrechnen',`${fmtCent(vr)} = _____ €`,'Ct ÷ 100 = €',vr/100,`${vr} ÷ 100 = ${fmtE(vr/100)} €`); },
+      ()=>{ const v=pick([250,350,450,750,850,950]); return makeMCeuro('Umrechnen',`${v} Ct = _____ €`,'100 Ct = 1 €',v/100,`${v} ÷ 100 = ${fmtE(v/100)} €`); },
+      ()=>{ const v=pick([1.50,2.50,3.50,4.50,7.50,12.50]); return makeMCcent('Umrechnen',`${fmtEuro(v)} = _____ Ct`,'× 100',v*100,`${fmtE(v)} × 100 = ${v*100} Ct`); },
+    ];
+    return pick(t)();
+  }
+
+  if(lv===2){
+    // Krumme Cents, keine runden Beträge
+    const t=[
+      ()=>{ const e=rand(1,49); const c=pick([3,7,11,13,17,19,23,27,31,37,41,43,47,53,57,61,67,71,73,77,83,87,91,93,97]); const tot=e+c/100; return makeMCcent('Umrechnen',`${fmtEuro(tot)} = _____ Ct`,'€ × 100 = Ct',Math.round(tot*100),`${fmtE(tot)} × 100 = ${Math.round(tot*100)} Ct`); },
+      ()=>{ const v=rand(103,987); return makeMCeuro('Umrechnen',`${v} Ct = _____ €`,'Ct ÷ 100',v/100,`${v} ÷ 100 = ${fmtE(v/100)} €`); },
+      ()=>{ const v=rand(1001,4997); return makeMCeuro('Umrechnen',`${fmtCent(v)} = _____ €`,'Ct ÷ 100',v/100,`${v} ÷ 100 = ${fmtE(v/100)} €`); },
+      ()=>{ const v=rand(1,99); return makeMCeuro('Umrechnen',`${v} Ct = _____ €`,'Ct ÷ 100',v/100,`${v} ÷ 100 = ${fmtE(v/100)} €`); },
+    ];
+    return pick(t)();
+  }
+
+  // lv===3 – Profi: große Beträge, gemischte Einheiten, krumme Cents
+  const t=[
+    ()=>{ const e=rand(50,500); const c=rand(1,99); const tot=e+c/100; return makeMCcent('Umrechnen',`${fmtEuro(tot)} = _____ Ct`,'€ × 100',Math.round(tot*100),`${fmtE(tot)} × 100 = ${Math.round(tot*100)} Ct`); },
+    ()=>{ const v=rand(5001,49999); return makeMCeuro('Umrechnen',`${fmtCent(v)} = _____ €`,'Ct ÷ 100',v/100,`${v} Ct ÷ 100 = ${fmtE(v/100)} €`); },
+    ()=>{ const e=rand(100,1000); const c=rand(1,99); const tot=e+c/100; return makeMCcent('Umrechnen',`${fmtEuro(tot)} = _____ Ct`,'× 100',Math.round(tot*100),`${fmtE(tot)} × 100 = ${Math.round(tot*100)} Ct`); },
+    ()=>{ const v=rand(10001,99999); return makeMCeuro('Umrechnen',`${fmtCent(v)} = _____ €`,'Ct ÷ 100',v/100,`${v} Ct ÷ 100 = ${fmtE(v/100)} €`); },
+  ];
+  return pick(t)();
+}
+
+// ────────────────────────────────────────────────────
+// ZUSAMMENRECHNEN
+// ────────────────────────────────────────────────────
+function genZusammen(){
+  const lv=diffLevel;
+
+  if(lv===0){
+    const t=[
+      ()=>{ const a=pick([1,2,5,10]),b=pick([1,2,5,10]); return makeMCeuro('Zusammenrechnen',`${a} € + ${b} € = _____ €`,'Einfach addieren',a+b,`${a} + ${b} = ${a+b} €`); },
+      ()=>{ const a=pick([0.50,1.00,2.00]),b=pick([0.50,1.00,2.00]); return makeMCeuro('Zusammenrechnen',`${fmtEuro(a)} + ${fmtEuro(b)} = _____ €`,'Kommas addieren',a+b,`${fmtE(a)} + ${fmtE(b)} = ${fmtE(a+b)} €`); },
+      ()=>{ const preis=pick([0.50,0.75,1.00,1.50,2.00]); const bez=pick([1,2,5]); const rest=Math.round((bez-preis)*100)/100; if(rest<0) return genZusammen(); return makeMCeuro('Zusammenrechnen',`Einkauf: ${fmtEuro(preis)}\nBezahlt: ${fmtEuro(bez)}\nRückgeld: _____ €`,'Bezahlt − Preis',rest,`${fmtE(bez)} − ${fmtE(preis)} = ${fmtE(rest)} €`); },
+      ()=>{ const a=pick([10,20,50]),b=pick([50,100,200]); return makeMCeuro('Zusammenrechnen',`${a} Ct + ${b} Ct = _____ €`,'Addieren, dann ÷100',(a+b)/100,`${a+b} Ct = ${fmtE((a+b)/100)} €`); },
+    ];
+    return pick(t)();
+  }
+
+  if(lv===1){
+    const t=[
+      ()=>{ const a=rand(1,10)+0.50,b=rand(1,10)+0.50; const s=Math.round((a+b)*100)/100; return makeMCeuro('Zusammenrechnen',`${fmtEuro(a)} + ${fmtEuro(b)} = _____ €`,'Kommazahlen addieren',s,`${fmtE(a)} + ${fmtE(b)} = ${fmtE(s)} €`); },
+      ()=>{ const a=rand(5,30)+0.50,b=rand(1,10)+0.50; const diff=Math.round((a-b)*100)/100; if(diff<0) return genZusammen(); return makeMCeuro('Zusammenrechnen',`${fmtEuro(a)} − ${fmtEuro(b)} = _____ €`,'Subtraktion',diff,`${fmtE(a)} − ${fmtE(b)} = ${fmtE(diff)} €`); },
+      ()=>{ const preis=rand(2,8)+pick([0,0.50]); const bez=Math.ceil(preis/5)*5; const rest=Math.round((bez-preis)*100)/100; return makeMCeuro('Zusammenrechnen',`Einkauf: ${fmtEuro(preis)}\nBezahlt: ${fmtEuro(bez)}\nRückgeld: _____ €`,'Bezahlt − Preis',rest,`${fmtE(bez)} − ${fmtE(preis)} = ${fmtE(rest)} €`); },
+      ()=>{ const item=rand(1,5)+0.50; const anz=rand(2,4); const s=Math.round(item*anz*100)/100; return makeMCeuro('Zusammenrechnen',`${anz} × ${fmtEuro(item)} = _____ €`,'Anzahl × Preis',s,`${anz} × ${fmtE(item)} = ${fmtE(s)} €`); },
+    ];
+    return pick(t)();
+  }
+
+  if(lv===2){
+    // Krumme Cents
+    const t=[
+      ()=>{ const a=rand(1,20)+rand(1,99)/100,b=rand(1,15)+rand(1,99)/100; const ra=Math.round(a*100)/100,rb=Math.round(b*100)/100,s=Math.round((ra+rb)*100)/100; return makeMCeuro('Zusammenrechnen',`${fmtEuro(ra)} + ${fmtEuro(rb)} = _____ €`,'Kommazahlen addieren',s,`${fmtE(ra)} + ${fmtE(rb)} = ${fmtE(s)} €`); },
+      ()=>{ const preis=rand(3,20)+rand(1,99)/100; const pr=Math.round(preis*100)/100; const bez=Math.ceil(pr/5)*5; const rest=Math.round((bez-pr)*100)/100; return makeMCeuro('Zusammenrechnen',`Einkauf: ${fmtEuro(pr)}\nBezahlt: ${fmtEuro(bez)}\nRückgeld: _____ €`,'Bezahlt − Preis',rest,`${fmtE(bez)} − ${fmtE(pr)} = ${fmtE(rest)} €`); },
+      ()=>{ const i1=rand(1,10)+rand(1,99)/100,i2=rand(1,10)+rand(1,99)/100,i3=rand(1,10)+rand(1,99)/100; const r1=Math.round(i1*100)/100,r2=Math.round(i2*100)/100,r3=Math.round(i3*100)/100; const s=Math.round((r1+r2+r3)*100)/100; return makeMCeuro('Zusammenrechnen',`${fmtEuro(r1)} + ${fmtEuro(r2)} + ${fmtEuro(r3)} = _____ €`,'Drei Beträge addieren',s,`Summe = ${fmtE(s)} €`); },
+      ()=>{ const item=rand(2,12)+rand(1,99)/100; const ri=Math.round(item*100)/100; const anz=rand(2,5); const s=Math.round(ri*anz*100)/100; return makeMCeuro('Zusammenrechnen',`${anz} × ${fmtEuro(ri)} = _____ €`,'Anzahl × Einzelpreis',s,`${anz} × ${fmtE(ri)} = ${fmtE(s)} €`); },
+    ];
+    return pick(t)();
+  }
+
+  // lv===3
+  const t=[
+    ()=>{ const a=rand(20,100)+rand(1,99)/100,b=rand(10,80)+rand(1,99)/100; const ra=Math.round(a*100)/100,rb=Math.round(b*100)/100,s=Math.round((ra+rb)*100)/100; return makeMCeuro('Zusammenrechnen',`${fmtEuro(ra)} + ${fmtEuro(rb)} = _____ €`,'Größere Kommazahlen',s,`${fmtE(ra)} + ${fmtE(rb)} = ${fmtE(s)} €`); },
+    ()=>{ const preis=rand(15,80)+rand(1,99)/100; const pr=Math.round(preis*100)/100; const bez=Math.ceil(pr/10)*10; const rest=Math.round((bez-pr)*100)/100; return makeMCeuro('Zusammenrechnen',`Einkauf: ${fmtEuro(pr)}\nBezahlt: ${fmtEuro(bez)}\nRückgeld: _____ €`,'Bezahlt − Preis',rest,`${fmtE(bez)} − ${fmtE(pr)} = ${fmtE(rest)} €`); },
+    ()=>{ const anz=rand(3,8); const ep=rand(5,25)+rand(1,99)/100; const rep=Math.round(ep*100)/100; const s=Math.round(anz*rep*100)/100; return makeMCeuro('Zusammenrechnen',`${anz} × ${fmtEuro(rep)} = _____ €`,'Anzahl × Einzelpreis',s,`${anz} × ${fmtE(rep)} = ${fmtE(s)} €`); },
+    ()=>{ const ges=rand(20,120)+rand(1,99)/100; const rg=Math.round(ges*100)/100; const anz=pick([2,3,4,5]); const pro=Math.round(rg/anz*100)/100; const check=Math.round(pro*anz*100)/100; if(Math.abs(check-rg)>0.01) return genZusammen(); return makeMCeuro('Zusammenrechnen',`${fmtEuro(rg)} auf ${anz} Personen aufteilen.\nJeder zahlt: _____ €`,'÷ Anzahl',pro,`${fmtE(rg)} ÷ ${anz} = ${fmtE(pro)} €`); },
+  ];
+  return pick(t)();
+}
+
+// ────────────────────────────────────────────────────
+// VERGLEICH  – Kernstück der Änderung
+// Muss immer gemischte Einheiten haben (€ vs Ct)
+// Höhere Stufen: krumme Werte, täuschend ähnliche Beträge
+// ────────────────────────────────────────────────────
+function genVergleich(){
+  const lv=diffLevel;
+
+  // Hilfsfunktion: gibt {text, aCt, bCt} zurück, nie beide in gleicher Einheit
+  function makeComp(aEuro, bCent){
+    const aCt=Math.round(aEuro*100);
+    const bCt=Math.round(bCent);
+    let sym,expla;
+    if(aCt>bCt){sym='>';expla=`${fmtEuro(aEuro)} = ${aCt} Ct > ${bCt} Ct`;}
+    else if(aCt<bCt){sym='<';expla=`${fmtEuro(aEuro)} = ${aCt} Ct < ${bCt} Ct`;}
+    else{sym='=';expla=`Beide sind gleich: ${aCt} Ct = ${fmtEuro(aEuro)}`;}
+    return {
+      typeLabel:'Vergleichen',
+      text:`Setze das richtige Zeichen ein:\n${fmtEuro(aEuro)}  _____  ${fmtCent(bCent)}`,
+      hint:'Rechne alles in Cent um, dann vergleiche!',
+      correct:sym, options:shuffle(['<','=','>']), expla
+    };
+  }
+
+  if(lv===0){
+    // Sehr klare Fälle, glatte Beträge
+    const pool=[
+      [1,100],[2,200],[5,500],[10,1000],
+      [0.50,50],[1,90],[2,190],[0.50,60],
+      [3,300],[5,499],[5,501],[10,999],
+    ];
+    const [a,b]=pick(pool);
+    return makeComp(a,b);
+  }
+
+  if(lv===1){
+    // Gemischte Beträge, manchmal eng beieinander
+    const pool=[
+      [1.50,150],[2.50,250],[3.50,349],[4.50,451],
+      [7.50,800],[10.00,950],[12.00,1199],[15.00,1501],
+      [0.99,100],[1.01,100],[5.00,499],[5.00,501],
+      [2.00,199],[2.00,201],[50.00,5000],[50.00,4999],
+    ];
+    const [a,b]=pick(pool);
+    return makeComp(a,b);
+  }
+
+  if(lv===2){
+    // Täuschend ähnliche Werte, krumme Cents
+    // Zufällig erzeugt, aber absichtlich eng
+    const base=rand(1,50)+rand(1,99)/100;
+    const rb=Math.round(base*100)/100;
+    const rbCt=Math.round(rb*100);
+    // offset: manchmal 0 (gleich), manchmal ±1 bis ±9 Ct
+    const offset=pick([0,0,1,-1,2,-2,3,-3,5,-5,7,-7,9,-9]);
+    const bCt=Math.max(1,rbCt+offset);
+    return makeComp(rb,bCt);
+  }
+
+  // lv===3 – Profi: große krumme Beträge, offset nur ±1 oder ±2 Ct
+  const base=rand(50,500)+rand(1,99)/100;
+  const rb=Math.round(base*100)/100;
+  const rbCt=Math.round(rb*100);
+  const offset=pick([0,0,0,1,-1,2,-2]);
+  const bCt=Math.max(1,rbCt+offset);
+  return makeComp(rb,bCt);
+}
+
+// ────────────────────────────────────────────────────
+// ALLTAGSAUFGABEN
+// ────────────────────────────────────────────────────
+const ITEMS_EASY=[
+  {name:'Brötchen',p:0.35},{name:'Schokoriegel',p:0.79},{name:'Apfel',p:0.45},
+  {name:'Heft',p:0.99},{name:'Bleistift',p:0.50},{name:'Radiergummi',p:0.25},
+  {name:'Gummibärchen',p:1.00},{name:'Lineal',p:1.50},{name:'Banane',p:0.40},
+  {name:'Kaugummi',p:0.20},{name:'Aufkleber',p:0.30},{name:'Stift',p:0.75},
+];
+const ITEMS_HARD=[
+  {name:'Buch',p:8.99},{name:'T-Shirt',p:12.49},{name:'Pizza',p:7.39},
+  {name:'Farbstifte',p:6.49},{name:'Lunchbox',p:9.87},{name:'Mütze',p:7.99},
+  {name:'Trinkflasche',p:11.49},{name:'Heft (5er)',p:4.95},{name:'Schal',p:8.39},
+  {name:'Sportschuhe',p:49.99},{name:'Backpack',p:24.97},{name:'Schulhemd',p:14.99},
+];
+
+function genAlltag(){
+  const lv=diffLevel;
+  const pool=lv>=2 ? ITEMS_HARD : ITEMS_EASY;
+
+  const t=[
+    ()=>{
+      const i=pick(pool); const bez=lv>=2 ? Math.ceil(i.p/10)*10 : pick([1,2,5,10]);
+      const rest=Math.round((bez-i.p)*100)/100;
+      if(rest<0||rest>bez) return null;
+      return makeMCeuro('Alltagsaufgaben',`Du kaufst: ${i.name} für ${fmtEuro(i.p)}\nDu gibst: ${fmtEuro(bez)}\nRückgeld: _____ €`,'Bezahlt − Preis',rest,`${fmtE(bez)} − ${fmtE(i.p)} = ${fmtE(rest)} €`);
+    },
+    ()=>{
+      const i1=pick(pool),i2=pick(pool);
+      const s=Math.round((i1.p+i2.p)*100)/100;
+      return makeMCeuro('Alltagsaufgaben',`• ${i1.name}: ${fmtEuro(i1.p)}\n• ${i2.name}: ${fmtEuro(i2.p)}\nGesamtpreis?`,'Beide Preise addieren',s,`${fmtE(i1.p)} + ${fmtE(i2.p)} = ${fmtE(s)} €`);
+    },
+    ()=>{
+      const i=pick(pool); const anz=lv>=2 ? rand(3,6) : rand(2,4);
+      const s=Math.round(i.p*anz*100)/100;
+      return makeMCeuro('Alltagsaufgaben',`${i.name} kostet ${fmtEuro(i.p)}.\nDu kaufst ${anz} Stück.\nGesamtpreis?`,'Anzahl × Preis',s,`${anz} × ${fmtE(i.p)} = ${fmtE(s)} €`);
+    },
+    ()=>{
+      const budget=lv>=2 ? rand(20,100)+pick([0,0.50]) : pick([2,5,10]);
+      const i1=pick(pool),i2=pick(pool);
+      const spent=Math.round((i1.p+i2.p)*100)/100;
+      if(spent>budget) return null;
+      const rest=Math.round((budget-spent)*100)/100;
+      return makeMCeuro('Alltagsaufgaben',`Du hast ${fmtEuro(budget)} Taschengeld.\nDu kaufst:\n• ${i1.name}: ${fmtEuro(i1.p)}\n• ${i2.name}: ${fmtEuro(i2.p)}\nWie viel hast du noch?`,'Budget − Ausgaben',rest,`${fmtE(budget)} − ${fmtE(spent)} = ${fmtE(rest)} €`);
+    },
+    ()=>{
+      if(lv<2) return null;
+      const i1=pick(pool),i2=pick(pool),i3=pick(pool);
+      const s=Math.round((i1.p+i2.p+i3.p)*100)/100;
+      const bez=Math.ceil(s/10)*10;
+      const rest=Math.round((bez-s)*100)/100;
+      return makeMCeuro('Alltagsaufgaben',`Einkauf:\n• ${i1.name}: ${fmtEuro(i1.p)}\n• ${i2.name}: ${fmtEuro(i2.p)}\n• ${i3.name}: ${fmtEuro(i3.p)}\nBezahlt: ${fmtEuro(bez)} → Rückgeld?`,'Rückgeld = Bezahlt − Summe',rest,`Summe: ${fmtE(s)} €; ${fmtE(bez)} − ${fmtE(s)} = ${fmtE(rest)} €`);
+    },
+    ()=>{
+      if(lv<3) return null;
+      const i=pick(pool); const proz=pick([5,10,15,20]);
+      const neu=Math.round(i.p*(1+proz/100)*100)/100;
+      return makeMCeuro('Alltagsaufgaben',`${i.name} kostet ${fmtEuro(i.p)}.\nNach Preiserhöhung um ${proz}%:\nNeuer Preis?`,`× ${(1+proz/100).toLocaleString('de-DE',{minimumFractionDigits:2})}`,neu,`${fmtE(i.p)} × ${(1+proz/100)} = ${fmtE(neu)} €`);
+    },
+  ];
+
+  // try up to 10 times
+  for(let i=0;i<10;i++){
+    const q=pick(t)();
+    if(q) return q;
+  }
+  return pick(t.slice(0,2))();
+}
+
+// ─── DISPATCH ───
+function getQuestion(){
+  let q=null, tries=0;
+  while(!q && tries<15){
+    tries++;
+    if(category==='umrechnen') q=genUmrechnen();
+    else if(category==='zusammen') q=genZusammen();
+    else if(category==='vergleich') q=genVergleich();
+    else if(category==='alltag') q=genAlltag();
+  }
+  if(!q) q=genUmrechnen();
+
+  // Tag styling based on difficulty
+  if(diffLevel>=3) q.tagClass='expert';
+  else if(diffLevel>=2) q.tagClass='hard';
+  else q.tagClass='';
+  return q;
+}
+
+// ─── RENDER ───
+function renderQuestion(){
+  answered=false;
+  currentQ=getQuestion();
+  stats.total++;
+  document.getElementById('qNum').textContent=stats.total;
+
+  const optBtns=currentQ.options.map((o,i)=>`
+    <button class="option-btn" id="opt-${i}" onclick="checkMC(this,'${esc(o)}','${esc(currentQ.correct)}')">
+      <span class="option-letter">${LETTERS[i]}</span>
+      <span>${o}</span>
+    </button>`).join('');
+
+  const hintHTML=currentQ.hint?`<div class="question-hint">💡 ${currentQ.hint}</div>`:'';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="question-card pop" id="qCard">
+      <span class="question-type-tag ${currentQ.tagClass||''}">${currentQ.typeLabel}</span>
+      <div class="question-text">${currentQ.text}</div>
+      ${hintHTML}
+      <div class="options-grid">${optBtns}</div>
+      <div id="feedback"></div>
+      <div id="nextWrap"></div>
+    </div>`;
+}
+
+function esc(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function checkMC(btn,chosen,correct){
+  if(answered) return;
+  answered=true;
+  const card=document.getElementById('qCard');
+  document.querySelectorAll('.option-btn').forEach(b=>{
+    b.disabled=true;
+    const txt=b.querySelector('span:last-child');
+    if(txt&&txt.textContent.trim()===correct&&b!==btn) b.classList.add('reveal-correct');
+  });
+
+  const ok=chosen===correct;
+  if(ok){
+    btn.classList.add('selected-correct');
+    card.classList.add('correct');
+    stats.correct++;
+    stats.points+=diffLevel+1;
+    streak++; wrongStreak=0;
+    showFeedback(true,`Super gemacht! 🎉 ${currentQ.expla}`);
+    if(streak>=STREAK_UP && diffLevel<3){
+      diffLevel++;
+      streak=0;
+      showToast(`🚀 Neue Stufe: ${LEVEL_INFO[diffLevel].name}!`);
+    }
+  } else {
+    btn.classList.add('selected-wrong');
+    card.classList.add('wrong');
+    stats.wrong++;
+    wrongStreak++; streak=Math.max(0,streak-1);
+    showFeedback(false,`Leider falsch. Richtige Antwort: <strong>${correct}</strong>. ${currentQ.expla}`);
+    if(wrongStreak>=STREAK_DOWN && diffLevel>0){
+      diffLevel--;
+      wrongStreak=0;
+      showToast(`📉 Zurück zu: ${LEVEL_INFO[diffLevel].name}`);
+    }
+  }
+  updateStats();
+  updateLevelUI();
+  document.getElementById('nextWrap').innerHTML=`<button class="next-btn" onclick="renderQuestion()">Nächste Aufgabe ▶</button>`;
+}
+
+function showFeedback(ok,msg){
+  document.getElementById('feedback').innerHTML=`
+    <div class="feedback-box ${ok?'correct':'wrong'}">
+      <span class="feedback-icon">${ok?'✅':'❌'}</span>
+      <span>${msg}</span>
+    </div>`;
+}
+
+function updateStats(){
+  document.getElementById('correct').textContent=stats.correct;
+  document.getElementById('wrong').textContent=stats.wrong;
+  document.getElementById('points').textContent=stats.points;
+  const pct=stats.total>0?Math.round(stats.correct/stats.total*100):0;
+  document.getElementById('progressPct').textContent=stats.total>0?pct+'%':'–';
+  document.getElementById('progressFill').style.width=pct+'%';
+}
+
+function updateLevelUI(){
+  const info=LEVEL_INFO[diffLevel];
+  const badge=document.getElementById('levelBadge');
+  const fill=document.getElementById('streakFill');
+
+  document.getElementById('levelStars').textContent=info.stars;
+  document.getElementById('levelName').textContent=info.name;
+  badge.className='level-badge'+(diffLevel>=3?' expert':diffLevel>=2?' hard':'');
+
+  // streak bar: progress toward next level-up (0–5 correct in a row)
+  const pct=Math.min(streak/STREAK_UP*100,100);
+  fill.style.width=pct+'%';
+  fill.className='streak-fill '+info.fillClass;
+
+  document.getElementById('streakCount').textContent=streak;
+  if(diffLevel>=3){
+    document.getElementById('streakNext').textContent=info.thresholdLabel;
+  } else {
+    const rem=STREAK_UP-streak;
+    document.getElementById('streakNext').textContent=`Noch ${rem} richtig für ⭐`.repeat(diffLevel+2).slice(0,`Noch ${rem} richtig für ⭐`.length);
+    document.getElementById('streakNext').textContent=`Noch ${rem} richtig bis zur nächsten Stufe`;
+  }
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function setCategory(c){
+  category=c;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+c).classList.add('active');
+  stats={correct:0,wrong:0,points:0,total:0};
+  streak=0; wrongStreak=0;
+  updateStats();
+  updateLevelUI();
+  renderQuestion();
+}
+
+// ─── INIT ───
+updateLevelUI();
+renderQuestion();
+</script>
+</body>
+</html>
