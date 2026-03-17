@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sachaufgaben zu Längen und Geld</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --primary: #d97706;
+    --primary-light: #fef3c7;
+    --primary-dark: #92400e;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --error: #dc2626;
+    --error-light: #fee2e2;
+    --text: #1c1917;
+    --text-muted: #78716c;
+    --border: #e7e5e4;
+    --card: #ffffff;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 10% 15%, #fef3c755 0%, transparent 40%),
+      radial-gradient(circle at 90% 85%, #dbeafe44 0%, transparent 40%);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #1c1917 0%, #292524 60%, #1c1917 100%);
+    color: white;
+    padding: 30px 20px 26px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  }
+  .back-btn {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.13);
+    border: 2px solid rgba(255,255,255,0.28);
+    border-radius: 30px;
+    padding: 7px 16px;
+    color: white;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.83rem;
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.26); }
+  .header-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% -20%, #d9770644 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .header h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(1.7rem, 5vw, 2.5rem);
+    font-weight: 800;
+    position: relative;
+    letter-spacing: -0.5px;
+  }
+  .header h1 span { color: #fbbf24; }
+  .header p { font-size: 0.93rem; opacity: 0.75; margin-top: 5px; position: relative; }
+  .header-chips {
+    display: flex; justify-content: center; gap: 8px;
+    margin-top: 14px; flex-wrap: wrap; position: relative;
+  }
+  .header-chip {
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 30px; padding: 4px 14px;
+    font-size: 0.84rem; font-weight: 700;
+  }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 28px 16px 60px; }
+
+  /* ── MODE TABS ── */
+  .mode-tabs {
+    display: flex; gap: 0;
+    background: white; border-radius: 16px;
+    box-shadow: var(--shadow); margin-bottom: 22px;
+    overflow: hidden; border: 2px solid var(--border);
+  }
+  .mode-tab {
+    flex: 1; border: none; background: transparent;
+    padding: 13px 10px;
+    font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800;
+    cursor: pointer; transition: all 0.22s; color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    border-right: 2px solid var(--border);
+  }
+  .mode-tab:last-child { border-right: none; }
+  .mode-tab.active-laenge { background: var(--blue-light); color: var(--blue); }
+  .mode-tab.active-geld   { background: var(--green-light); color: var(--green); }
+  .mode-tab.active-kombi  { background: var(--purple-light); color: var(--purple); }
+
+  /* ── LEVEL DISPLAY ── */
+  .level-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px; gap: 12px; flex-wrap: wrap;
+  }
+  .level-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: white; border-radius: 50px; padding: 8px 18px;
+    box-shadow: var(--shadow); font-weight: 800; font-size: 0.9rem;
+    border: 2px solid var(--border); transition: all 0.4s;
+  }
+  .level-badge.lv1 { border-color: #bbf7d0; color: var(--green); }
+  .level-badge.lv2 { border-color: #fde68a; color: var(--primary); }
+  .level-badge.lv3 { border-color: #fca5a5; color: #dc2626; }
+  .level-badge.lv4 { border-color: #c4b5fd; color: var(--purple); }
+
+  .streak-pill {
+    background: white; border-radius: 50px; padding: 8px 16px;
+    box-shadow: var(--shadow); font-weight: 800; font-size: 0.88rem;
+    color: var(--text-muted); border: 2px solid var(--border);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .streak-pill span { color: var(--primary); }
+
+  /* ── PROGRESS TO NEXT LEVEL ── */
+  .lvl-progress { margin-bottom: 22px; }
+  .lvl-prog-label { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; }
+  .lvl-prog-track { height: 8px; background: var(--border); border-radius: 100px; overflow: hidden; }
+  .lvl-prog-fill  { height: 100%; border-radius: 100px; transition: width 0.5s ease; }
+  .lvl-prog-fill.lv1 { background: linear-gradient(90deg,#4ade80,#16a34a); }
+  .lvl-prog-fill.lv2 { background: linear-gradient(90deg,#fbbf24,#d97706); }
+  .lvl-prog-fill.lv3 { background: linear-gradient(90deg,#f87171,#dc2626); }
+  .lvl-prog-fill.lv4 { background: linear-gradient(90deg,#a78bfa,#7c3aed); }
+
+  /* ── SCORE BAR ── */
+  .score-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    background: white; border-radius: 14px; padding: 11px 18px;
+    margin-bottom: 20px; box-shadow: var(--shadow); flex-wrap: wrap; gap: 8px;
+  }
+  .score-item { display: flex; align-items: center; gap: 7px; font-weight: 700; font-size: 0.92rem; }
+  .score-icon { font-size: 1.2rem; }
+  .score-val { font-size: 1.1rem; color: var(--blue); }
+  .score-val.g { color: var(--success); }
+  .score-val.r { color: var(--error); }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 0; box-shadow: var(--shadow);
+    margin-bottom: 18px; border: 2px solid transparent;
+    transition: border 0.3s; overflow: hidden;
+  }
+  .q-card.correct { border-color: var(--success); }
+  .q-card.wrong   { border-color: var(--error); }
+
+  .q-card-header {
+    padding: 18px 24px 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .q-scene-icon { font-size: 2rem; line-height: 1; }
+  .q-meta { flex: 1; }
+  .q-type-tag {
+    display: inline-block; border-radius: 20px; padding: 3px 11px;
+    font-size: 0.74rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 4px;
+  }
+  .q-type-tag.laenge { background: var(--blue-light); color: var(--blue); }
+  .q-type-tag.geld   { background: var(--green-light); color: var(--green); }
+  .q-type-tag.kombi  { background: var(--purple-light); color: var(--purple); }
+  .q-diff-dots { display: flex; gap: 4px; align-items: center; }
+  .q-diff-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border);
+  }
+  .q-diff-dot.filled.lv1 { background: var(--green); }
+  .q-diff-dot.filled.lv2 { background: var(--primary); }
+  .q-diff-dot.filled.lv3 { background: var(--error); }
+  .q-diff-dot.filled.lv4 { background: var(--purple); }
+
+  .q-body { padding: 22px 24px 20px; }
+
+  /* Story box */
+  .q-story {
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 18px;
+    border-left: 4px solid var(--primary);
+    white-space: pre-line;
+  }
+  .q-story.laenge { border-color: var(--blue); }
+  .q-story.geld   { border-color: var(--green); }
+  .q-story.kombi  { border-color: var(--purple); }
+
+  .q-question {
+    font-size: clamp(1.05rem, 3vw, 1.2rem);
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .q-hint {
+    font-size: 0.83rem; color: var(--text-muted); margin-bottom: 16px;
+    padding: 8px 13px; background: var(--primary-light); border-radius: 10px;
+    border-left: 3px solid var(--primary); font-weight: 600;
+  }
+
+  /* ── OPTIONS ── */
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media(max-width:480px){ .options-grid{ grid-template-columns:1fr; } }
+
+  .opt-btn {
+    border: 2.5px solid var(--border); border-radius: 12px;
+    padding: 13px 14px;
+    font-family: 'Nunito', sans-serif; font-size: 0.97rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; background: #fafaf9; color: var(--text);
+    text-align: left; display: flex; align-items: center; gap: 10px;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--primary); background: var(--primary-light);
+    color: var(--primary-dark); transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(217,119,6,0.12);
+  }
+  .opt-btn.sel-ok  { border-color: var(--success); background: var(--success-light); color: #14532d; }
+  .opt-btn.sel-bad { border-color: var(--error);   background: var(--error-light);   color: #7f1d1d; }
+  .opt-btn.rev-ok  { border-color: var(--success); background: var(--success-light); color: #14532d; }
+  .opt-btn:disabled { cursor: default; }
+  .opt-letter {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--border); display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 900; flex-shrink: 0; transition: background 0.2s;
+  }
+  .opt-btn.sel-ok  .opt-letter { background: var(--success); color: white; }
+  .opt-btn.sel-bad .opt-letter { background: var(--error);   color: white; }
+  .opt-btn.rev-ok  .opt-letter { background: var(--success); color: white; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    border-radius: 12px; padding: 12px 15px; font-weight: 700; font-size: 0.92rem;
+    margin-top: 14px; display: flex; align-items: flex-start; gap: 10px;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn{ from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+  .feedback.ok  { background: var(--success-light); color: #14532d; border-left: 4px solid var(--success); }
+  .feedback.bad { background: var(--error-light);   color: #7f1d1d; border-left: 4px solid var(--error); }
+  .fb-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  /* ── SOLUTION STEPS ── */
+  .solution-steps {
+    background: #f8fafc; border-radius: 10px; padding: 12px 14px;
+    margin-top: 10px; font-size: 0.85rem; font-weight: 600;
+    color: var(--text-muted); border: 1px solid var(--border);
+    line-height: 1.7;
+  }
+  .solution-steps strong { color: var(--text); display: block; margin-bottom:4px; font-size:0.88rem; }
+
+  /* ── NEXT BTN ── */
+  .next-btn {
+    display: block; width: 100%; border: none; border-radius: 12px; padding: 14px;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+    cursor: pointer; color: white; margin-top: 14px; transition: all 0.2s;
+    background: linear-gradient(135deg, #d97706, #2563eb);
+    box-shadow: 0 4px 14px rgba(217,119,6,0.25);
+  }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217,119,6,0.3); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+    background: #1c1917; color: white;
+    border-radius: 50px; padding: 12px 28px;
+    font-weight: 800; font-size: 0.97rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3); z-index: 1000;
+    transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+    pointer-events: none; white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @keyframes pop{ 0%{transform:scale(0.88);opacity:0} 60%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+  .pop { animation: pop 0.3s ease forwards; }
+
+  @media(max-width:600px){
+    .q-body{ padding: 16px 14px 14px; }
+    .q-card-header{ padding: 14px 16px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="back-btn" href="index.html">← Startseite</a>
+  <div class="header-glow"></div>
+  <h1>🧮 <span>Sachaufgaben</span></h1>
+  <p>5. Klasse Mittelschule Bayern · Längen &amp; Geld</p>
+  <div class="header-chips">
+    <span class="header-chip">📏 Längen</span>
+    <span class="header-chip">💶 Geld</span>
+    <span class="header-chip">🔀 Kombiniert</span>
+    <span class="header-chip">⭐ Adaptiv</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- MODE TABS -->
+  <div class="mode-tabs">
+    <button class="mode-tab active-laenge" id="tab-laenge" onclick="setMode('laenge')">📏 Längen</button>
+    <button class="mode-tab" id="tab-geld"   onclick="setMode('geld')">💶 Geld</button>
+    <button class="mode-tab" id="tab-kombi"  onclick="setMode('kombi')">🔀 Kombiniert</button>
+  </div>
+
+  <!-- LEVEL + STREAK -->
+  <div class="level-row">
+    <div class="level-badge lv1" id="levelBadge">
+      <span id="levelStars">⭐</span>
+      <span id="levelName">Einsteiger</span>
+    </div>
+    <div class="streak-pill">🔥 Richtige in Folge: <span id="streakCount">0</span></div>
+  </div>
+
+  <!-- PROGRESS TO NEXT LEVEL -->
+  <div class="lvl-progress">
+    <div class="lvl-prog-label">
+      <span>Fortschritt zur nächsten Stufe</span>
+      <span id="lvlProgLabel">0 / 5</span>
+    </div>
+    <div class="lvl-prog-track">
+      <div class="lvl-prog-fill lv1" id="lvlProgFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- SCORE BAR -->
+  <div class="score-bar">
+    <div class="score-item"><span class="score-icon">🎯</span><span>Aufgabe</span><span class="score-val" id="qNum">1</span></div>
+    <div class="score-item"><span class="score-icon">✅</span><span>Richtig</span><span class="score-val g" id="scCorrect">0</span></div>
+    <div class="score-item"><span class="score-icon">❌</span><span>Falsch</span><span class="score-val r" id="scWrong">0</span></div>
+    <div class="score-item"><span class="score-icon">⭐</span><span>Punkte</span><span class="score-val" id="scPoints">0</span></div>
+  </div>
+
+  <div id="qArea"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  ADAPTIVE SYSTEM
+//  lv 0 = Einsteiger, 1 = Geübt, 2 = Fortgeschritten, 3 = Profi
+//  +1 Stufe nach STREAK_UP richtigen in Folge
+//  -1 Stufe nach WRONG_DOWN falschen in Folge
+// ══════════════════════════════════════════════════════
+let lv          = 0;
+let streak      = 0;
+let wrongStreak = 0;
+const STREAK_UP   = 5;
+const WRONG_DOWN  = 3;
+
+const LV_INFO = [
+  { name:'Einsteiger',      stars:'⭐',       cls:'lv1' },
+  { name:'Geübt',           stars:'⭐⭐',     cls:'lv2' },
+  { name:'Fortgeschritten', stars:'⭐⭐⭐',   cls:'lv3' },
+  { name:'Profi',           stars:'⭐⭐⭐⭐', cls:'lv4' },
+];
+
+let mode     = 'laenge';
+let stats    = { correct:0, wrong:0, points:0, total:0 };
+let answered = false;
+let currentQ = null;
+const LETTERS = ['A','B','C','D'];
+
+// ── MATH UTILS ──
+function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function rnd2(n)  { return Math.round(n*100)/100; }
+
+// Längen-Formatierung
+const UFAC = { mm:1, cm:10, dm:100, m:1000, km:1000000 };
+function cvt(v,from,to){ return v*UFAC[from]/UFAC[to]; }
+function fmtL(v,unit){
+  const r = Math.round(v*1000)/1000;
+  return r.toLocaleString('de-DE',{maximumFractionDigits:3})+' '+unit;
+}
+
+// Geld-Formatierung
+function fmtE(n){ return rnd2(n).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
+function fmtCt(n){ return Math.round(n)+' Ct'; }
+
+// Wrong answers für Zahlen (Euro)
+function wEuro(correct, count=3){
+  const set=new Set();
+  const ms=[0.1,10,2,0.5,0.01,100]; const os=[0.01,0.05,0.10,0.50,1,2,5,-0.01,-0.10,-1,-5,0.03,0.07];
+  let t=0;
+  while(set.size<count && t<400){ t++;
+    let c=Math.random()<0.55 ? correct*pick(ms) : correct+pick(os);
+    c=rnd2(c); if(c>0 && fmtE(c)!==fmtE(correct)) set.add(fmtE(c));
+  }
+  [correct*10,correct/10,correct+1,correct*100].forEach(f=>{ if(set.size<count && fmtE(rnd2(f))!==fmtE(correct)) set.add(fmtE(rnd2(f))); });
+  return [...set].slice(0,count);
+}
+
+// Wrong answers für Längen
+function wLen(correct, unit, count=3){
+  const set=new Set();
+  const ms=[0.1,10,2,0.5,100,0.01]; const os=[1,2,5,10,0.5,0.1,-1,-2,-5,-10,50,100,0.01];
+  let t=0;
+  while(set.size<count && t<400){ t++;
+    let c=Math.random()<0.55 ? correct*pick(ms) : correct+pick(os);
+    c=Math.round(c*1000)/1000; if(c>0 && fmtL(c,unit)!==fmtL(correct,unit)) set.add(fmtL(c,unit));
+  }
+  [correct*10,correct/10,correct+1,correct*0.1].forEach(f=>{ if(set.size<count && fmtL(Math.round(f*1000)/1000,unit)!==fmtL(correct,unit)) set.add(fmtL(Math.round(f*1000)/1000,unit)); });
+  return [...set].slice(0,count);
+}
+
+function shuf(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function mcLen(label,scene,icon,story,q,hint,correct,unit,steps,tag){
+  const cs=fmtL(correct,unit);
+  const ws=wLen(correct,unit,3);
+  return {label,scene,icon,story,q,hint,correct:cs,options:shuf([cs,...ws]),steps,tag:tag||'laenge'};
+}
+function mcEuro(label,scene,icon,story,q,hint,correct,steps,tag){
+  const cs=fmtE(correct);
+  const ws=wEuro(correct,3);
+  return {label,scene,icon,story,q,hint,correct:cs,options:shuf([cs,...ws]),steps,tag:tag||'geld'};
+}
+
+// ══════════════════════════════════════════════════════
+//  SACHAUFGABEN – LÄNGEN
+// ══════════════════════════════════════════════════════
+
+function sachLaenge(){
+  const tpl = [
+
+    // ── LV 0 – sehr einfach ──
+    ()=>{ if(lv>1) return null;
+      const a=rand(2,8), b=rand(1,5);
+      return mcLen('Sachaufgabe Längen','Schule','🏫',
+        `Anna und Ben messen die Länge ihres Klassenzimmers.\nAnna misst ${a} m, Ben misst ${b} m mehr.`,
+        `Wie lang ist das Klassenzimmer laut Ben?`,
+        '1 m = 1 m – einfach addieren',
+        a+b,'m',`${a} m + ${b} m = ${a+b} m`);
+    },
+    ()=>{ if(lv>1) return null;
+      const a=rand(3,9)*10, b=rand(1,5)*10;
+      return mcLen('Sachaufgabe Längen','Sport','⚽',
+        `Das Schulsportfeld ist ${a} m lang.\nDie Laufbahn daneben ist ${b} m lang.`,
+        `Wie lang sind beide Strecken zusammen?`,
+        'Beide Längen addieren',
+        a+b,'m',`${a} m + ${b} m = ${a+b} m`);
+    },
+    ()=>{ if(lv>1) return null;
+      const a=rand(2,9)*100;
+      return mcLen('Sachaufgabe Längen','Reise','🚌',
+        `Der Schulbus fährt ${a} m zur nächsten Haltestelle.`,
+        `Wie viele km ist das?`,
+        '1 km = 1000 m',
+        a/1000,'km',`${a} m ÷ 1000 = ${a/1000} km`);
+    },
+    ()=>{ if(lv>1) return null;
+      const a=rand(2,8), b=rand(1,4);
+      return mcLen('Sachaufgabe Längen','Natur','🌲',
+        `Ein Baum ist ${a} m hoch.\nNach einem Jahr ist er ${b} dm gewachsen.`,
+        `Wie hoch ist der Baum jetzt in dm?`,
+        '1 m = 10 dm',
+        a*10+b,'dm',`${a} m = ${a*10} dm; ${a*10} + ${b} = ${a*10+b} dm`);
+    },
+    ()=>{ if(lv>1) return null;
+      const a=rand(3,9)*5;
+      return mcLen('Sachaufgabe Längen','Schneidern','✂️',
+        `Lena hat ein ${a} cm langes Stück Stoff.\nSie schneidet davon ${Math.floor(a/2)} cm ab.`,
+        `Wie viele mm Stoff hat sie noch übrig?`,
+        '1 cm = 10 mm',
+        (a-Math.floor(a/2))*10,'mm',`${a-Math.floor(a/2)} cm × 10 = ${(a-Math.floor(a/2))*10} mm`);
+    },
+
+    // ── LV 1 – mittelschwer ──
+    ()=>{ if(lv<1||lv>2) return null;
+      const a=rand(2,5), b=rand(3,8)*100;
+      return mcLen('Sachaufgabe Längen','Wandern','🥾',
+        `Familie Müller wandert.\nSie legen ${a} km und noch ${b} m zurück.`,
+        `Wie weit sind sie insgesamt in Metern gelaufen?`,
+        '1 km = 1000 m',
+        a*1000+b,'m',`${a} km = ${a*1000} m; ${a*1000} + ${b} = ${a*1000+b} m`);
+    },
+    ()=>{ if(lv<1||lv>2) return null;
+      const a=rand(3,8), b=rand(2,7);
+      const diff=a-b; if(diff<=0) return null;
+      return mcLen('Sachaufgabe Längen','Seilspringen','🪢',
+        `Tom hat ein Seil mit ${a} m Länge.\nEr schneidet ${b} dm ${rand(1,9)*10} cm ab.\nRunde: Nur die ${b} dm Abschnitt zählen.`,
+        `Wie viele cm Seil bleiben übrig?`,
+        '1 m = 100 cm; 1 dm = 10 cm',
+        (a-b/10)*100,'cm',`${a} m = ${a*100} cm; ${b} dm = ${b*10} cm; ${a*100} − ${b*10} = ${a*100-b*10} cm`);
+    },
+    ()=>{ if(lv<1||lv>2) return null;
+      const a=rand(1,4), b=rand(2,8)*50;
+      return mcLen('Sachaufgabe Längen','Straße','🛣️',
+        `Eine Straße ist ${a} km und ${b} m lang.`,
+        `Wie lang ist sie in cm?`,
+        '1 km = 100.000 cm; 1 m = 100 cm',
+        a*100000+b*100,'cm',`${a} km = ${a*100000} cm; ${b} m = ${b*100} cm; Summe = ${a*100000+b*100} cm`);
+    },
+    ()=>{ if(lv<1||lv>2) return null;
+      const anz=rand(3,8), len=rand(2,9)*5;
+      return mcLen('Sachaufgabe Längen','Basteln','🎨',
+        `Für ein Bastelprojekt braucht jeder Schüler ${len} cm Schnur.\nIn der Klasse sind ${anz+20} Schüler, aber nur ${anz} machen mit.`,
+        `Wie viele dm Schnur werden insgesamt benötigt?`,
+        'Anzahl × Länge, dann cm → dm',
+        anz*len/10,'dm',`${anz} × ${len} cm = ${anz*len} cm = ${anz*len/10} dm`);
+    },
+    ()=>{ if(lv<1||lv>2) return null;
+      const a=rand(2,6)*1000, b=rand(1,5)*100;
+      return mcLen('Sachaufgabe Längen','Fahrrad','🚴',
+        `Jonas fährt täglich ${a} m zur Schule und ${b} m zum Sportplatz.\nInsgesamt fährt er hin und zurück.`,
+        `Wie viele km fährt Jonas insgesamt pro Tag? (beide Wege je 2×)`,
+        '(a+b)×2 dann m→km',
+        (a+b)*2/1000,'km',`(${a}+${b}) m × 2 = ${(a+b)*2} m = ${(a+b)*2/1000} km`);
+    },
+
+    // ── LV 2 – fortgeschritten ──
+    ()=>{ if(lv<2) return null;
+      const a=rand(2,5), b=rand(3,8)*100, c=rand(1,9)*10;
+      return mcLen('Sachaufgabe Längen','Marathon','🏃',
+        `Beim Stadtlauf gibt es 3 Abschnitte:\n• Abschnitt 1: ${a} km\n• Abschnitt 2: ${b} m\n• Abschnitt 3: ${c} dm`,
+        `Wie lang ist die Gesamtstrecke in Metern?`,
+        'Alles in m umrechnen, dann addieren',
+        a*1000+b+c/10,'m',`${a} km=${a*1000} m; ${b} m; ${c} dm=${c/10} m; Summe=${a*1000+b+c/10} m`);
+    },
+    ()=>{ if(lv<2) return null;
+      const strecke=rand(3,10)*1000, speed=rand(3,8)*100;
+      const time=strecke/speed;
+      if(!Number.isInteger(time)) return null;
+      return mcLen('Sachaufgabe Längen','Zug','🚂',
+        `Ein Zug legt ${strecke} m zurück.\nEr fährt ${speed} m pro Minute.`,
+        `Wie viele Minuten braucht der Zug?`,
+        'Strecke ÷ Geschwindigkeit',
+        time,'min',`${strecke} ÷ ${speed} = ${time} min`);
+    },
+    ()=>{ if(lv<2) return null;
+      const lp=rand(2,5), bp=rand(3,7);
+      const umfang=2*(lp+bp);
+      return mcLen('Sachaufgabe Längen','Zaun','🏡',
+        `Herr Fischer baut einen rechteckigen Garten.\nLänge: ${lp} m, Breite: ${bp} m.\nEr möchte einen Zaun rundherum bauen.`,
+        `Wie viele Meter Zaun braucht er?`,
+        'Umfang = 2 × (Länge + Breite)',
+        umfang,'m',`2 × (${lp} + ${bp}) = 2 × ${lp+bp} = ${umfang} m`);
+    },
+    ()=>{ if(lv<2) return null;
+      const total=rand(3,8)*1000+rand(1,9)*100;
+      const parts=rand(3,5);
+      if(total%parts!==0) return null;
+      return mcLen('Sachaufgabe Längen','Eisenbahn','🛤️',
+        `Eine Eisenbahnlinie ist ${total} m lang.\nSie wird in ${parts} gleich lange Abschnitte geteilt.`,
+        `Wie lang ist jeder Abschnitt in km?`,
+        'Gesamtlänge ÷ Anzahl, dann m→km',
+        total/parts/1000,'km',`${total} ÷ ${parts} = ${total/parts} m = ${total/parts/1000} km`);
+    },
+
+    // ── LV 3 – Profi ──
+    ()=>{ if(lv<3) return null;
+      const lp=rand(4,12), bp=rand(3,8);
+      const um=2*(lp+bp);
+      const preis_per_m=rand(8,25);
+      return mcEuro('Sachaufgabe Längen+Geld','Zaun kaufen','🏗️',
+        `Ein Grundstück ist ${lp} m lang und ${bp} m breit.\nZaunmaterial kostet ${preis_per_m} € pro Meter.`,
+        `Was kostet der gesamte Zaun?`,
+        'Umfang × Preis pro Meter',
+        um*preis_per_m,`2×(${lp}+${bp})=${um} m; ${um}×${preis_per_m} €=${um*preis_per_m} €`,'kombi');
+    },
+    ()=>{ if(lv<3) return null;
+      const dist=rand(2,5)*1000+rand(1,9)*100;
+      const fuel=rand(5,12);
+      const per100=rand(6,10);
+      // km driven
+      const km=dist/1000;
+      const cost=rnd2(km/100*per100*fuel/100*100);
+      // simpler: price per km
+      const pricePkm=rnd2(fuel*per100/100/100);
+      const total=rnd2(km*pricePkm);
+      return mcEuro('Sachaufgabe Längen+Geld','Autofahrt','🚗',
+        `Frau Keller fährt ${dist} m weit.\nIhr Auto verbraucht ${per100} l auf 100 km.\nEin Liter Benzin kostet ${fmtE(fuel/10)}.`,
+        `Was kostet die Fahrt insgesamt?`,
+        'km × Verbrauch/100 × Preis/Liter',
+        rnd2(dist/1000/100*per100*(fuel/10)),`${dist/1000} km; Verbrauch: ${dist/1000/100*per100} l; Kosten: ${rnd2(dist/1000/100*per100*(fuel/10))} €`,'kombi');
+    },
+    ()=>{ if(lv<3) return null;
+      const rolle=rand(5,20)*10; // cm
+      const anz=rand(3,7);
+      const pRolle=rand(3,8)+0.99;
+      const total_cm=rolle*anz;
+      const cost=rnd2(pRolle*anz);
+      return mcEuro('Sachaufgabe Längen+Geld','Stoff kaufen','🧵',
+        `Jede Stoffrolle enthält ${rolle} cm.\nLena kauft ${anz} Rollen zu je ${fmtE(pRolle)}.`,
+        `Wie viel bezahlt Lena insgesamt?`,
+        'Anzahl × Preis pro Rolle',
+        cost,`${anz} × ${fmtE(pRolle)} = ${fmtE(cost)}`,'kombi');
+    },
+  ];
+
+  for(let i=0;i<20;i++){
+    const q=pick(tpl)();
+    if(q) return q;
+  }
+  return pick(tpl.filter(f=>{ try{ return f()!==null; }catch{return false;} }))();
+}
+
+// ══════════════════════════════════════════════════════
+//  SACHAUFGABEN – GELD
+// ══════════════════════════════════════════════════════
+
+function sachGeld(){
+  const tpl = [
+
+    // ── LV 0 ──
+    ()=>{ if(lv>1) return null;
+      const p=pick([0.50,0.75,0.99,1.20,1.50]); const bez=pick([1,2,5]);
+      const rest=rnd2(bez-p); if(rest<0) return null;
+      return mcEuro('Sachaufgabe Geld','Kiosk','🥤',
+        `Tim kauft am Kiosk eine Flasche Wasser für ${fmtE(p)} €.\nEr bezahlt mit ${fmtE(bez)} €.`,
+        `Wie viel Rückgeld bekommt er?`,
+        'Bezahlt − Preis',
+        rest,`${fmtE(bez)} − ${fmtE(p)} = ${fmtE(rest)} €`);
+    },
+    ()=>{ if(lv>1) return null;
+      const a=rand(1,4)+pick([0,0.50]), b=rand(1,3)+pick([0,0.50]);
+      const s=rnd2(a+b);
+      return mcEuro('Sachaufgabe Geld','Bäckerei','🥐',
+        `In der Bäckerei kostet ein Brötchen ${fmtE(a)} € und ein Croissant ${fmtE(b)} €.`,
+        `Was bezahlt man für beides zusammen?`,
+        'Beide Preise addieren',
+        s,`${fmtE(a)} + ${fmtE(b)} = ${fmtE(s)} €`);
+    },
+    ()=>{ if(lv>1) return null;
+      const ep=pick([0.25,0.50,0.75,1.00,1.50]); const anz=rand(2,5);
+      const s=rnd2(ep*anz);
+      return mcEuro('Sachaufgabe Geld','Süßigkeiten','🍬',
+        `Sofia kauft ${anz} Gummibärchentüten.\nJede kostet ${fmtE(ep)} €.`,
+        `Was bezahlt Sofia insgesamt?`,
+        'Anzahl × Einzelpreis',
+        s,`${anz} × ${fmtE(ep)} = ${fmtE(s)} €`);
+    },
+    ()=>{ if(lv>1) return null;
+      const bud=pick([2,5,10]); const p=pick([0.99,1.49,1.99,0.79,0.59]);
+      const rest=rnd2(bud-p); if(rest<0) return null;
+      return mcEuro('Sachaufgabe Geld','Pausensnack','🍎',
+        `Max hat ${fmtE(bud)} € Taschengeld.\nEr kauft einen Apfel für ${fmtE(p)} €.`,
+        `Wie viel Taschengeld hat er danach noch?`,
+        'Budget − Preis',
+        rest,`${fmtE(bud)} − ${fmtE(p)} = ${fmtE(rest)} €`);
+    },
+
+    // ── LV 1 ──
+    ()=>{ if(lv<1||lv>2) return null;
+      const items=[
+        {n:'Heft',p:0.99},{n:'Bleistift',p:0.49},{n:'Lineal',p:1.49},
+        {n:'Radiergummi',p:0.39},{n:'Stift',p:0.79},{n:'Kleber',p:1.29}
+      ];
+      const i1=pick(items),i2=pick(items),i3=pick(items);
+      const s=rnd2(i1.p+i2.p+i3.p);
+      const bez=Math.ceil(s); const rest=rnd2(bez-s);
+      return mcEuro('Sachaufgabe Geld','Schreibwarenhandel','✏️',
+        `Im Schreibwarenhandel kauft Lisa:\n• ${i1.n}: ${fmtE(i1.p)}\n• ${i2.n}: ${fmtE(i2.p)}\n• ${i3.n}: ${fmtE(i3.p)}\nSie zahlt mit ${fmtE(bez)} €.`,
+        `Wie viel Rückgeld bekommt sie?`,
+        'Summe aller Artikel, dann Rückgeld',
+        rest,`Summe: ${fmtE(s)}; Rückgeld: ${fmtE(bez)} − ${fmtE(s)} = ${fmtE(rest)} €`);
+    },
+    ()=>{ if(lv<1||lv>2) return null;
+      const ep=rand(2,8)+pick([0.49,0.99,0.79,0.89]); const anz=rand(2,4);
+      const s=rnd2(ep*anz); const bez=Math.ceil(s/5)*5; const rest=rnd2(bez-s);
+      return mcEuro('Sachaufgabe Geld','Supermarkt','🛒',
+        `Im Supermarkt kostet ein Joghurt ${fmtE(ep)} €.\nMama kauft ${anz} Stück und bezahlt mit ${fmtE(bez)} €.`,
+        `Wie viel Rückgeld erhält sie?`,
+        'Anzahl × Preis; Rückgeld = Bezahlt − Summe',
+        rest,`${anz} × ${fmtE(ep)} = ${fmtE(s)}; Rückgeld: ${fmtE(bez)} − ${fmtE(s)} = ${fmtE(rest)} €`);
+    },
+    ()=>{ if(lv<1||lv>2) return null;
+      const pp=rand(2,5)+0.50; const anz=rand(3,6);
+      const s=rnd2(pp*anz); const split=rnd2(s/2);
+      return mcEuro('Sachaufgabe Geld','Pizza-Party','🍕',
+        `${anz} Freunde bestellen gemeinsam Pizza.\nJede Pizza kostet ${fmtE(pp)} €.\nSie teilen die Kosten gleichmäßig zu zweit auf.`,
+        `Wie viel zahlt jede Hälfte der Gruppe?`,
+        'Gesamtkosten ÷ 2',
+        split,`${anz} × ${fmtE(pp)} = ${fmtE(s)}; ${fmtE(s)} ÷ 2 = ${fmtE(split)} €`);
+    },
+    ()=>{ if(lv<1||lv>2) return null;
+      const preis=rand(5,15)+pick([0.49,0.99,0.79]);
+      const rabatt=pick([10,20,25,50]);
+      const neu=rnd2(preis*(1-rabatt/100));
+      return mcEuro('Sachaufgabe Geld','Schlussverkauf','🏷️',
+        `Ein T-Shirt kostet ursprünglich ${fmtE(preis)} €.\nIm Schlussverkauf gibt es ${rabatt} % Rabatt.`,
+        `Was kostet das T-Shirt jetzt?`,
+        `Preis × (1 − ${rabatt}/100)`,
+        neu,`${fmtE(preis)} × ${(1-rabatt/100)} = ${fmtE(neu)} €`);
+    },
+
+    // ── LV 2 ──
+    ()=>{ if(lv<2) return null;
+      const items=[
+        {n:'Buch',p:8.99},{n:'Füller',p:12.49},{n:'Taschenrechner',p:7.39},
+        {n:'Heft-Set',p:4.95},{n:'Schulranzen',p:49.99},{n:'Sportbeutel',p:14.99},
+        {n:'Trinkflasche',p:9.87},{n:'Lunchbox',p:11.49}
+      ];
+      const i1=pick(items),i2=pick(items),i3=pick(items);
+      const s=rnd2(i1.p+i2.p+i3.p);
+      const bez=Math.ceil(s/10)*10; const rest=rnd2(bez-s);
+      return mcEuro('Sachaufgabe Geld','Schulanfang','🎒',
+        `Zur Schuleinführung kauft Familie Bauer:\n• ${i1.n}: ${fmtE(i1.p)}\n• ${i2.n}: ${fmtE(i2.p)}\n• ${i3.n}: ${fmtE(i3.p)}\nSie zahlen mit ${fmtE(bez)} €.`,
+        `Wie viel Rückgeld bekommen sie?`,
+        'Summe berechnen, dann Rückgeld',
+        rest,`Summe: ${fmtE(s)}; ${fmtE(bez)} − ${fmtE(s)} = ${fmtE(rest)} €`);
+    },
+    ()=>{ if(lv<2) return null;
+      const preis=rand(20,80)+pick([0.49,0.99,0.79,0.39]);
+      const anzahlung=rand(10,Math.floor(preis/2));
+      const rest=rnd2(preis-anzahlung);
+      return mcEuro('Sachaufgabe Geld','Fahrrad','🚲',
+        `Ein Fahrrad kostet ${fmtE(preis)} €.\nLena zahlt eine Anzahlung von ${fmtE(anzahlung)} €.`,
+        `Wie viel muss sie noch bezahlen?`,
+        'Gesamtpreis − Anzahlung',
+        rest,`${fmtE(preis)} − ${fmtE(anzahlung)} = ${fmtE(rest)} €`);
+    },
+    ()=>{ if(lv<2) return null;
+      const ep=rand(3,12)+pick([0.49,0.99,0.79]);
+      const anz=rand(4,8);
+      const s=rnd2(ep*anz);
+      const pp=rnd2(s/anz);
+      return mcEuro('Sachaufgabe Geld','Klassenausflug','🎡',
+        `${anz} Schüler gehen in den Freizeitpark.\nJede Eintrittskarte kostet ${fmtE(ep)} €.`,
+        `Wie viel kostet der Eintritt für die ganze Gruppe?`,
+        'Anzahl × Einzelpreis',
+        s,`${anz} × ${fmtE(ep)} = ${fmtE(s)} €`);
+    },
+    ()=>{ if(lv<2) return null;
+      const woche=rand(3,7)+pick([0.50,0.75,0.25]);
+      const wochen=rand(4,12);
+      const gesamt=rnd2(woche*wochen);
+      const ziel=rand(Math.ceil(gesamt)+5,Math.ceil(gesamt)+30)+pick([0,0.50,0.99]);
+      const fehlt=rnd2(ziel-gesamt);
+      return mcEuro('Sachaufgabe Geld','Sparschwein','🐷',
+        `Jonas spart ${fmtE(woche)} € pro Woche.\nNach ${wochen} Wochen möchte er ein Spiel für ${fmtE(ziel)} € kaufen.`,
+        `Wie viel Geld fehlt Jonas noch?`,
+        'Gespartes = Wochen × Betrag; Fehlt = Ziel − Gespartes',
+        fehlt,`${wochen} × ${fmtE(woche)} = ${fmtE(gesamt)} €; ${fmtE(ziel)} − ${fmtE(gesamt)} = ${fmtE(fehlt)} €`);
+    },
+
+    // ── LV 3 ──
+    ()=>{ if(lv<3) return null;
+      const monats=rand(20,50)+pick([0.49,0.99,0.79]);
+      const monate=rand(6,12);
+      const total=rnd2(monats*monate);
+      const rabatt=pick([5,10,15]);
+      const ersparnis=rnd2(total*rabatt/100);
+      return mcEuro('Sachaufgabe Geld','Streaming','📱',
+        `Ein Streaming-Abo kostet ${fmtE(monats)} € pro Monat.\nNach ${monate} Monaten bekommt man ${rabatt} % Rückerstattung.`,
+        `Wie viel Euro werden zurückerstattet?`,
+        `Gesamtbetrag × ${rabatt}/100`,
+        ersparnis,`${monate} × ${fmtE(monats)} = ${fmtE(total)} €; × ${rabatt/100} = ${fmtE(ersparnis)} €`);
+    },
+    ()=>{ if(lv<3) return null;
+      const netto=rand(15,60)+pick([0.49,0.99,0.39]);
+      const mwst=pick([7,19]);
+      const brutto=rnd2(netto*(1+mwst/100));
+      return mcEuro('Sachaufgabe Geld','Mehrwertsteuer','🧾',
+        `Ein Artikel kostet netto (ohne MwSt.) ${fmtE(netto)} €.\nEs fallen ${mwst} % Mehrwertsteuer an.`,
+        `Was ist der Bruttopreis (mit MwSt.)?`,
+        `Netto × (1 + ${mwst}/100)`,
+        brutto,`${fmtE(netto)} × ${(1+mwst/100).toFixed(2)} = ${fmtE(brutto)} €`);
+    },
+    ()=>{ if(lv<3) return null;
+      const preis=rand(30,120)+pick([0.49,0.99,0.79]);
+      const rate=rand(5,15)+pick([0,0.50]);
+      const monate=rand(6,12);
+      const total=rnd2(rate*monate);
+      const diff=rnd2(total-preis); if(diff<0) return null;
+      return mcEuro('Sachaufgabe Geld','Ratenkauf','💳',
+        `Ein Tablet kostet ${fmtE(preis)} €.\nBei Ratenkauf zahlt man ${fmtE(rate)} € pro Monat, ${monate} Monate lang.`,
+        `Wie viel mehr zahlt man beim Ratenkauf?`,
+        'Raten gesamt − Normalpreis',
+        diff,`${monate} × ${fmtE(rate)} = ${fmtE(total)} €; ${fmtE(total)} − ${fmtE(preis)} = ${fmtE(diff)} €`);
+    },
+  ];
+
+  for(let i=0;i<20;i++){
+    const q=pick(tpl)();
+    if(q) return q;
+  }
+  return null;
+}
+
+// ══════════════════════════════════════════════════════
+//  SACHAUFGABEN – KOMBINIERT
+// ══════════════════════════════════════════════════════
+
+function sachKombi(){
+  const tpl = [
+
+    // ── LV 0+1 ──
+    ()=>{ if(lv>2) return null;
+      const meter=rand(2,8); const ppm=rand(3,8)+pick([0,0.50]);
+      const cost=rnd2(meter*ppm);
+      return mcEuro('Kombinierte Sachaufgabe','Tapete kaufen','🏠',
+        `Für ein Zimmer braucht man ${meter} m Tapete.\nEine Rolle kostet ${fmtE(ppm)} € pro Meter.`,
+        `Was kostet die Tapete insgesamt?`,
+        'Länge × Preis pro Meter',
+        cost,`${meter} m × ${fmtE(ppm)} = ${fmtE(cost)}`,'kombi');
+    },
+    ()=>{ if(lv>2) return null;
+      const cm=rand(3,9)*10; const ppCm=pick([0.05,0.10,0.20,0.25,0.50]);
+      const cost=rnd2(cm*ppCm);
+      return mcEuro('Kombinierte Sachaufgabe','Lichterkette','✨',
+        `Eine Lichterkette hat ${cm} cm Länge.\nSie kostet ${fmtE(ppCm)} € pro cm.`,
+        `Was kostet die Lichterkette?`,
+        'cm × Preis/cm',
+        cost,`${cm} × ${fmtE(ppCm)} = ${fmtE(cost)}`,'kombi');
+    },
+    ()=>{ if(lv>2) return null;
+      const km=rand(2,8); const ppkm=pick([0.20,0.25,0.30,0.35,0.50]);
+      const cost=rnd2(km*ppkm);
+      return mcEuro('Kombinierte Sachaufgabe','Taxi','🚕',
+        `Das Taxi fährt ${km} km.\nDer Fahrpreis beträgt ${fmtE(ppkm)} € pro km.`,
+        `Was kostet die Taxifahrt?`,
+        'km × Preis/km',
+        cost,`${km} × ${fmtE(ppkm)} = ${fmtE(cost)}`,'kombi');
+    },
+
+    // ── LV 1+2 ──
+    ()=>{ if(lv<1||lv>3) return null;
+      const lp=rand(4,10), bp=rand(3,7);
+      const ppqm=rand(8,20)+pick([0.49,0.99,0.79]);
+      const flaeche=lp*bp;
+      const cost=rnd2(flaeche*ppqm);
+      return mcEuro('Kombinierte Sachaufgabe','Bodenbelag','🏗️',
+        `Ein Raum ist ${lp} m lang und ${bp} m breit.\nBodenbelag kostet ${fmtE(ppqm)} € pro m².`,
+        `Wie viel kostet der Bodenbelag für den ganzen Raum?`,
+        'Fläche = Länge × Breite; Kosten = Fläche × Preis/m²',
+        cost,`${lp} × ${bp} = ${flaeche} m²; ${flaeche} × ${fmtE(ppqm)} = ${fmtE(cost)}`,'kombi');
+    },
+    ()=>{ if(lv<1) return null;
+      const dist=rand(2,6)*1000+rand(1,9)*100;
+      const ppkm=pick([0.25,0.30,0.35,0.40,0.50]);
+      const km=dist/1000;
+      const cost=rnd2(km*ppkm);
+      return mcEuro('Kombinierte Sachaufgabe','Schulbus','🚌',
+        `Der Schulbus legt täglich ${dist} m zurück.\nDie Busgesellschaft berechnet ${fmtE(ppkm)} € pro km.`,
+        `Was kostet eine Fahrt?`,
+        'm → km; dann × Preis',
+        cost,`${dist} m = ${km} km; ${km} × ${fmtE(ppkm)} = ${fmtE(cost)}`,'kombi');
+    },
+    ()=>{ if(lv<1) return null;
+      const preis=rand(3,12)+pick([0.49,0.99]);
+      const rabatt_per_m=pick([0.10,0.20,0.50,1.00]);
+      const meter=rand(3,8);
+      const full=rnd2(preis*meter);
+      const disc=rnd2(rabatt_per_m*meter);
+      const final=rnd2(full-disc);
+      return mcEuro('Kombinierte Sachaufgabe','Stoffmarkt','🧶',
+        `Stoff kostet ${fmtE(preis)} € pro Meter.\nBei ${meter} Metern oder mehr gibt es ${fmtE(rabatt_per_m)} € Rabatt pro Meter.\nLena kauft ${meter} m.`,
+        `Was bezahlt Lena?`,
+        '(Preis − Rabatt) × Meter',
+        final,`(${fmtE(preis)} − ${fmtE(rabatt_per_m)}) × ${meter} m = ${fmtE(rnd2(preis-rabatt_per_m))} × ${meter} = ${fmtE(final)}`,'kombi');
+    },
+
+    // ── LV 2+3 ──
+    ()=>{ if(lv<2) return null;
+      const lp=rand(5,15), bp=rand(4,10);
+      const um=2*(lp+bp);
+      const zaun_pp=rand(12,30)+pick([0.49,0.99]);
+      const tor=rand(2,4)*100+pick([0,50]);
+      const total=rnd2(um*zaun_pp+tor);
+      return mcEuro('Kombinierte Sachaufgabe','Gartenplanung','🌻',
+        `Ein Garten ist ${lp} m × ${bp} m groß.\nZaun kostet ${fmtE(zaun_pp)} € pro Laufmeter.\nEin Gartentor kostet ${fmtE(tor)} €.`,
+        `Was kostet der gesamte Zaun mit Tor?`,
+        'Umfang × Preis + Tor',
+        total,`Umfang: 2×(${lp}+${bp})=${um} m; ${um}×${fmtE(zaun_pp)}=${fmtE(rnd2(um*zaun_pp))}+${fmtE(tor)}=${fmtE(total)}`,'kombi');
+    },
+    ()=>{ if(lv<2) return null;
+      const dist1=rand(2,8)*1000, dist2=rand(1,5)*100+rand(1,9)*10;
+      const ppkm=rand(3,9)+pick([0.49,0.99]);
+      const total_m=dist1+dist2;
+      const total_km=total_m/1000;
+      const cost=rnd2(total_km*ppkm);
+      return mcEuro('Kombinierte Sachaufgabe','Lieferfahrt','🚚',
+        `Ein Lieferwagen fährt zuerst ${dist1} m zur Bäckerei,\ndann noch ${dist2} m zur Schule.\nDer Fahrer bekommt ${fmtE(ppkm)} € pro km.`,
+        `Wie viel verdient der Fahrer?`,
+        'Gesamtstrecke m→km; × Preis/km',
+        cost,`${dist1}+${dist2}=${total_m} m = ${total_km} km; × ${fmtE(ppkm)} = ${fmtE(cost)}`,'kombi');
+    },
+    ()=>{ if(lv<3) return null;
+      const laenge=rand(50,200);
+      const breite=rand(3,8);
+      const flaeche=laenge*breite;
+      const ppqm=rand(2,6)+pick([0.49,0.99]);
+      const kosten=rnd2(flaeche/10000*ppqm*10000);
+      // flaeche in m², dann Preis
+      const flaechem2=laenge*breite; // both in m
+      const kostenReal=rnd2(flaechem2*ppqm);
+      return mcEuro('Kombinierte Sachaufgabe','Wiese mähen','🌾',
+        `Eine Wiese ist ${laenge} m lang und ${breite} m breit.\nDas Mähen kostet ${fmtE(ppqm)} € pro m².`,
+        `Wie viel kostet es, die gesamte Wiese zu mähen?`,
+        'Fläche = Länge × Breite; Kosten = Fläche × Preis',
+        kostenReal,`${laenge} × ${breite} = ${flaechem2} m²; × ${fmtE(ppqm)} = ${fmtE(kostenReal)}`,'kombi');
+    },
+    ()=>{ if(lv<3) return null;
+      const strecke=rand(3,15)*1000+rand(1,9)*100;
+      const km=strecke/1000;
+      const verbrauch=rand(6,12); // l/100km
+      const preis=rand(14,20)/10; // €/l
+      const liter=rnd2(km/100*verbrauch);
+      const cost=rnd2(liter*preis);
+      return mcEuro('Kombinierte Sachaufgabe','Klassenausflug','🎢',
+        `Der Bus fährt ${strecke} m zum Freizeitpark.\nVerbrauch: ${verbrauch} l/100 km.\nDiesel kostet ${fmtE(preis)} €/l.`,
+        `Was kostet allein der Kraftstoff?`,
+        'km ÷ 100 × Verbrauch × Preis',
+        cost,`${km} km; ${rnd2(km/100)} × ${verbrauch} = ${liter} l; × ${fmtE(preis)} = ${fmtE(cost)}`,'kombi');
+    },
+  ];
+
+  for(let i=0;i<20;i++){
+    const q=pick(tpl)();
+    if(q) return q;
+  }
+  return null;
+}
+
+// ══════════════════════════════════════════════════════
+//  DISPATCH
+// ══════════════════════════════════════════════════════
+function getQ(){
+  let q=null, tries=0;
+  while(!q && tries<30){
+    tries++;
+    if(mode==='laenge')     q=sachLaenge();
+    else if(mode==='geld')  q=sachGeld();
+    else                    q=sachKombi();
+  }
+  // tag class for header colouring
+  if(!q) q=sachGeld(); // absolute fallback
+  return q;
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════
+function renderQ(){
+  answered=false;
+  currentQ=getQ();
+  if(!currentQ) { renderQ(); return; }
+  stats.total++;
+  document.getElementById('qNum').textContent=stats.total;
+
+  const lvCls=LV_INFO[lv].cls;
+  const tagCls=currentQ.tag||mode;
+
+  const diffDots=Array.from({length:4},(_,i)=>`<div class="q-diff-dot${i<=lv?' filled '+lvCls:''}"></div>`).join('');
+
+  const opts=currentQ.options.map((o,i)=>`
+    <button class="opt-btn" id="ob${i}" onclick="checkAnswer(this,'${esc(o)}','${esc(currentQ.correct)}')">
+      <span class="opt-letter">${LETTERS[i]}</span>
+      <span>${o}</span>
+    </button>`).join('');
+
+  const hintHTML=currentQ.hint?`<div class="q-hint">💡 ${currentQ.hint}</div>`:'';
+
+  document.getElementById('qArea').innerHTML=`
+    <div class="q-card pop" id="qCard">
+      <div class="q-card-header">
+        <div class="q-scene-icon">${currentQ.icon||'📝'}</div>
+        <div class="q-meta">
+          <div><span class="q-type-tag ${tagCls}">${currentQ.label}</span></div>
+          <div class="q-diff-dots">${diffDots}</div>
+        </div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--text-muted);">Stufe ${lv+1}/4</div>
+      </div>
+      <div class="q-body">
+        <div class="q-story ${tagCls}">${currentQ.story}</div>
+        <div class="q-question">❓ ${currentQ.q}</div>
+        ${hintHTML}
+        <div class="options-grid">${opts}</div>
+        <div id="fbArea"></div>
+        <div id="nextArea"></div>
+      </div>
+    </div>`;
+}
+
+function esc(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function checkAnswer(btn, chosen, correct){
+  if(answered) return;
+  answered=true;
+  const card=document.getElementById('qCard');
+
+  document.querySelectorAll('.opt-btn').forEach(b=>{
+    b.disabled=true;
+    const t=b.querySelector('span:last-child');
+    if(t&&t.textContent.trim()===correct&&b!==btn) b.classList.add('rev-ok');
+  });
+
+  const ok=chosen===correct;
+  if(ok){
+    btn.classList.add('sel-ok');
+    card.classList.add('correct');
+    stats.correct++;
+    stats.points+=lv+1;
+    streak++; wrongStreak=0;
+    document.getElementById('fbArea').innerHTML=`
+      <div class="feedback ok">
+        <span class="fb-icon">✅</span>
+        <div>
+          <div>Super! Das ist richtig! 🎉</div>
+          <div class="solution-steps"><strong>Lösung:</strong>${currentQ.steps}</div>
+        </div>
+      </div>`;
+    if(streak>=STREAK_UP && lv<3){
+      lv++; streak=0;
+      showToast(`🚀 Neue Stufe: ${LV_INFO[lv].name}!`);
+    }
+  } else {
+    btn.classList.add('sel-bad');
+    card.classList.add('wrong');
+    stats.wrong++;
+    wrongStreak++; streak=Math.max(0,streak-1);
+    document.getElementById('fbArea').innerHTML=`
+      <div class="feedback bad">
+        <span class="fb-icon">❌</span>
+        <div>
+          <div>Leider falsch. Richtige Antwort: <strong>${correct}</strong></div>
+          <div class="solution-steps"><strong>So wäre es gegangen:</strong>${currentQ.steps}</div>
+        </div>
+      </div>`;
+    if(wrongStreak>=WRONG_DOWN && lv>0){
+      lv--; wrongStreak=0;
+      showToast(`📉 Zurück zu: ${LV_INFO[lv].name}`);
+    }
+  }
+
+  updateUI();
+  document.getElementById('nextArea').innerHTML=`<button class="next-btn" onclick="renderQ()">Nächste Aufgabe ▶</button>`;
+}
+
+function updateUI(){
+  // score
+  document.getElementById('scCorrect').textContent=stats.correct;
+  document.getElementById('scWrong').textContent=stats.wrong;
+  document.getElementById('scPoints').textContent=stats.points;
+
+  // level badge
+  const info=LV_INFO[lv];
+  const badge=document.getElementById('levelBadge');
+  badge.className='level-badge '+info.cls;
+  document.getElementById('levelStars').textContent=info.stars;
+  document.getElementById('levelName').textContent=info.name;
+
+  // streak + progress
+  document.getElementById('streakCount').textContent=streak;
+  const pct=lv>=3?100:Math.min(streak/STREAK_UP*100,100);
+  const fill=document.getElementById('lvlProgFill');
+  fill.style.width=pct+'%';
+  fill.className='lvl-prog-fill '+info.cls;
+  document.getElementById('lvlProgLabel').textContent=lv>=3?'Höchste Stufe! 🏆':`${streak} / ${STREAK_UP}`;
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function setMode(m){
+  mode=m;
+  ['laenge','geld','kombi'].forEach(x=>{
+    document.getElementById('tab-'+x).className='mode-tab'+(x===m?' active-'+x:'');
+  });
+  stats={correct:0,wrong:0,points:0,total:0};
+  streak=0; wrongStreak=0; lv=0;
+  updateUI();
+  renderQ();
+}
+
+// ── INIT ──
+updateUI();
+renderQ();
+</script>
+</body>
+</html>
